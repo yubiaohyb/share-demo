@@ -2,6 +2,7 @@ package com.yubiaohyb.sharedemo.controller;
 
 import com.yubiaohyb.sharedemo.annotation.DateEndTime;
 import com.yubiaohyb.sharedemo.form.DateEndTimeTestForm;
+import com.yubiaohyb.sharedemo.thread.TestElegantThread;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.validation.BindingResult;
@@ -35,8 +36,16 @@ public class TestController1 {
 
     @GetMapping("/test3")
     public String test3(@DateEndTime Date date) {
-        LOGGER.debug("invoke test1");
+        LOGGER.debug("invoke test3");
         System.out.println(date);
+        return "successs";
+    }
+
+    @GetMapping("/test4")
+    public String test4() {
+        LOGGER.debug("invoke test4");
+        TestElegantThread elegantThread = new TestElegantThread();
+        elegantThread.run();
         return "successs";
     }
 
