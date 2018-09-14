@@ -9,6 +9,15 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
+/**
+ * 人若志趣不远，心不在焉，虽学不成。
+ * <p>
+ * description  -  截止日期时间格式器
+ *
+ * @author Yubiao Huang (https://github.com/yubiaohyb)
+ * @version $$Id$$
+ * @since 2018/9/15 上午1:02
+ */
 @Component
 public class DateEndTimeFormatter implements Formatter<Date> {
     private static final String DATETIME_FORMAT = "yyyy-MM-dd HH:mm:ss";

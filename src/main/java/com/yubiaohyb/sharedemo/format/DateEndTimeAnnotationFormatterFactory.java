@@ -11,6 +11,15 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * 人若志趣不远，心不在焉，虽学不成。
+ * <p>
+ * description  -  截止日期时间注解格式器工厂
+ *
+ * @author Yubiao Huang (https://github.com/yubiaohyb)
+ * @version $$Id$$
+ * @since 2018/9/15 上午1:02
+ */
 @Component
 public class DateEndTimeAnnotationFormatterFactory implements AnnotationFormatterFactory<DateEndTime> {
 

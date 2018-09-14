@@ -9,6 +9,15 @@ import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
+/**
+ * 人若志趣不远，心不在焉，虽学不成。
+ * <p>
+ * description  -  web mvc配置
+ *
+ * @author Yubiao Huang (https://github.com/yubiaohyb)
+ * @version $$Id$$
+ * @since 2018/9/15 上午1:02
+ */
 @Configuration
 @EnableWebMvc
 @ComponentScan(value = {"com.yubiaohyb.sharedemo.controller", "com.yubiaohyb.sharedemo.format"})

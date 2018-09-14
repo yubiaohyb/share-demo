@@ -7,6 +7,15 @@ import org.springframework.web.servlet.DispatcherServlet;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletRegistration.Dynamic;
 
+/**
+ * 人若志趣不远，心不在焉，虽学不成。
+ * <p>
+ * description  -  web应用初始化
+ *
+ * @author Yubiao Huang (https://github.com/yubiaohyb)
+ * @version $$Id$$
+ * @since 2018/9/15 上午1:02
+ */
 public class WebInitializer implements WebApplicationInitializer {
 
     @Override
