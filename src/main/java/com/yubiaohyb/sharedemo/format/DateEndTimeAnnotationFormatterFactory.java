@@ -28,7 +28,7 @@ public class DateEndTimeAnnotationFormatterFactory implements AnnotationFormatte
 
     @Override
     public Set<Class<?>> getFieldTypes() {
-        Set<Class<?>> fieldTypes = new HashSet<Class<?>>();
+        Set<Class<?>> fieldTypes = new HashSet<>();
         fieldTypes.add(Date.class);
         return fieldTypes;
     }

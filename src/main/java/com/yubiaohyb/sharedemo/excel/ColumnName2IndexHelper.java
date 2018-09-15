@@ -17,13 +17,20 @@ import java.util.*;
  */
 public final class ColumnName2IndexHelper {
 
+    private ColumnName2IndexHelper() {
+    }
+
+    public final static ColumnName2IndexMapper getColumnName2IndexMapper(HSSFRow row) {
+        return ColumnName2IndexHelperFactory.getHelper().getName2IndexMapper(row);
+    }
+
     /**
      * 获取列名索引映射
      *
      * @param row
      * @return
      */
-    public final ColumnName2IndexMapper getColumnName2IndexMapper(HSSFRow row) {
+    public final ColumnName2IndexMapper getName2IndexMapper(HSSFRow row) {
         Map<String, List<Integer>> columnName2IndexMap = new HashMap<>();
         Iterator<Cell> iterator = row.iterator();
         while (iterator.hasNext()) {
@@ -43,6 +50,18 @@ public final class ColumnName2IndexHelper {
         return new ColumnName2IndexMapper(columnName2IndexMap);
     }
 
+    /**
+     * 列名映射索引辅助器工厂类
+     * <p>
+     * 根据责任单一原则剥离对象的创建
+     */
+    private static final class ColumnName2IndexHelperFactory {
+
+        public static ColumnName2IndexHelper getHelper() {
+            return new ColumnName2IndexHelper();
+        }
+    }
+
     public final class ColumnName2IndexMapper {
 
         private Map<String, List<Integer>> columnName2IndexMap;
@@ -57,11 +76,24 @@ public final class ColumnName2IndexHelper {
          * @param columnName
          * @return
          */
-        public int getColumnIndexByName(String columnName) {
-            //Assert.verify(columnName2IndexMap.containsKey(columnName), String.format("未知的列名：%s", columnName));
-            if (columnName2IndexMap.containsKey(columnName)) {
-                return getColumnIndexByName(columnName, 0);
+        public int tryGetColumnIndexByName(String columnName) {
+            return tryGetColumnIndexByName(columnName, 0);
+        }
+
+        /**
+         * 按列名获取索引
+         *
+         * @param columnName
+         * @return
+         */
+        public int tryGetColumnIndexByName(String columnName, int indexInList) {
+            if (isColumnExist(columnName, indexInList)) {
+                return getColumnIndexByName(columnName, indexInList);
             }
+            /**
+             * 当获取列不存在时返回-1，将后续处理交由调用方决定
+             * 尽量不影响设计逻辑的走通
+             */
             return -1;
         }
 
@@ -69,11 +101,24 @@ public final class ColumnName2IndexHelper {
          * 按列名获取索引
          *
          * @param columnName
-         * @param serialNumber
+         * @param indexInList
          * @return
          */
-        public int getColumnIndexByName(String columnName, int serialNumber) {
-            return columnName2IndexMap.get(columnName).get(serialNumber);
+        private int getColumnIndexByName(String columnName, int indexInList) {
+            return columnName2IndexMap.get(columnName).get(indexInList);
+        }
+
+        private boolean isColumnExist(String columnName, int indexInList) {
+            return isColumnNameExist(columnName) && isColumnIndexExist(columnName, indexInList);
+        }
+
+        private boolean isColumnNameExist(String columnName) {
+            return columnName2IndexMap.containsKey(columnName);
+        }
+
+        private boolean isColumnIndexExist(String columnName, int indexInList) {
+            int size = columnName2IndexMap.get(columnName).size();
+            return size > indexInList && indexInList >= 0;
         }
     }
 

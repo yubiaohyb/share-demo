@@ -12,8 +12,8 @@ import org.slf4j.LoggerFactory;
  * @version $$Id$$
  * @since 2018/9/15 上午1:02
  */
-public final class TestElegantThread extends ElegantThread {
-    private static final Logger LOGGER = LoggerFactory.getLogger(TestElegantThread.class);
+public final class TestAbstractElegantThread extends AbstractElegantThread {
+    private static final Logger LOGGER = LoggerFactory.getLogger(TestAbstractElegantThread.class);
 
     @Override
     protected void runElegantly() {
