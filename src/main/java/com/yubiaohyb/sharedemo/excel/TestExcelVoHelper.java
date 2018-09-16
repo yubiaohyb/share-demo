@@ -11,5 +11,5 @@ import com.yubiaohyb.sharedemo.vo.TestExcelVo;
  * @version $$Id$$
  * @since 2018/9/16 下午2:10
  */
-public class TestExcelVoHelper extends ExcelHelper<TestExcelVo> {
+public class TestExcelVoHelper extends AbstractExcelHelper<TestExcelVo> {
 }

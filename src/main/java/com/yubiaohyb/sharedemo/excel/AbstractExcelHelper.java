@@ -21,9 +21,9 @@ import java.util.*;
  * @version $$Id$$
  * @since 2018/9/16 下午12:38
  */
-public abstract class ExcelHelper<T> {
+public abstract class AbstractExcelHelper<T> {
 
-    private Logger logger = LoggerFactory.getLogger(ExcelHelper.class);
+    private Logger logger = LoggerFactory.getLogger(AbstractExcelHelper.class);
 
     private ColumnName2IndexHelper.ColumnName2IndexMapper columnName2IndexMapper;
 
