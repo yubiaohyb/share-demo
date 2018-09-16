@@ -2,7 +2,6 @@ package com.yubiaohyb.sharedemo.excel;
 
 import com.alibaba.fastjson.JSON;
 import com.yubiaohyb.sharedemo.annotation.ExcelColumn;
-import com.yubiaohyb.sharedemo.utils.GenericsUtils;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
@@ -21,15 +20,15 @@ import java.util.*;
  * @version $$Id$$
  * @since 2018/9/16 下午12:38
  */
-public abstract class AbstractExcelHelper<T> {
+public class ExcelHelper<T> {
 
-    private Logger logger = LoggerFactory.getLogger(AbstractExcelHelper.class);
+    private Logger logger = LoggerFactory.getLogger(ExcelHelper.class);
 
     private ColumnName2IndexHelper.ColumnName2IndexMapper columnName2IndexMapper;
 
     private Map<Field, Integer> field2ColumnIndexMap;
 
-    private boolean titlesSetted = false;
+    private boolean initialized = false;
 
     private static void setTitles(List<String> titles, HSSFRow row) {
         for (int i = 0; i < titles.size(); i++) {
@@ -40,10 +39,9 @@ public abstract class AbstractExcelHelper<T> {
 
     public void init(List<String> titles, HSSFRow row) {
         setTitles(titles, row);
+        this.logger.debug("titles={}", JSON.toJSONString(titles));
         this.columnName2IndexMapper = ColumnName2IndexHelper.getColumnName2IndexMapper(row);
-        List<Field> excelColumnFields = getExcelColumnFields();
-        this.field2ColumnIndexMap = getField2ColumnIndexMap(excelColumnFields);
-        this.titlesSetted = true;
+        this.initialized = true;
     }
 
     private Map<Field, Integer> getField2ColumnIndexMap(List<Field> excelColumnFields) {
@@ -60,12 +58,12 @@ public abstract class AbstractExcelHelper<T> {
         String columnName = excelColumn.name();
         int sameNameIndex = excelColumn.sameNameIndex();
         int columnIndex = this.columnName2IndexMapper.tryGetColumnIndexByName(columnName, sameNameIndex);
-        this.logger.debug("ExcelColumn(name = {}, sameNameIndex = {}), Field(name={}, columnIndex={}, class={})", columnName, sameNameIndex, field.getName(), columnIndex, field.getType());
+        this.logger.debug("ExcelColumn(name = {}, sameNameIndex = {}) ==> columnIndex={}, Field(name={}, class={})", columnName, sameNameIndex, columnIndex, field.getName(), field.getType());
         return columnIndex;
     }
 
-    private List<Field> getExcelColumnFields() {
-        Field[] fields = GenericsUtils.getSuperClassGenricType(getClass()).getDeclaredFields();
+    private List<Field> getExcelColumnFields(T obj) {
+        Field[] fields = obj.getClass().getDeclaredFields();
         List<Field> excelColumnFields = new ArrayList<>();
         for (Field field : fields) {
             if (field.isAnnotationPresent(ExcelColumn.class)) {
@@ -75,28 +73,41 @@ public abstract class AbstractExcelHelper<T> {
         return excelColumnFields;
     }
 
-    public void setDataRows(List<T> datas, HSSFSheet sheet, int startRow) {
+    public void setDataRows(List<T> datas, HSSFSheet sheet, int startRowNo) {
         HSSFRow row;
-        if (!this.titlesSetted) {
+        if (!this.initialized) {
             this.logger.error("尚未初始化");
             return;
         }
         for (int i = 0; i < datas.size(); i++) {
-            row = sheet.createRow(i + startRow);
+            row = sheet.createRow(i + startRowNo);
             T obj = datas.get(i);
+            this.trySetField2ColumnIndexMap(obj);
             this.logger.debug("json={}", JSON.toJSONString(obj));
-            Iterator<Map.Entry<Field, Integer>> iterator = field2ColumnIndexMap.entrySet().iterator();
-            while (iterator.hasNext()) {
-                Map.Entry<Field, Integer> entry = iterator.next();
-                HSSFCell cell = row.createCell(entry.getValue());
-                try {
-                    Field field = entry.getKey();
-                    field.setAccessible(true);
-                    cell.setCellValue(field.get(obj).toString());
-                } catch (IllegalAccessException e) {
-                    this.logger.error("设置行时发生异常", e);
-                }
+            this.setRowCells(row, obj);
+        }
+    }
+
+    private void setRowCells(HSSFRow row, T obj) {
+        Iterator<Map.Entry<Field, Integer>> iterator = this.field2ColumnIndexMap.entrySet().iterator();
+        while (iterator.hasNext()) {
+            Map.Entry<Field, Integer> entry = iterator.next();
+            HSSFCell cell = row.createCell(entry.getValue());
+            Field field = null;
+            try {
+                field = entry.getKey();
+                field.setAccessible(true);
+                cell.setCellValue(field.get(obj).toString());
+            } catch (IllegalAccessException e) {
+                this.logger.error("设置行表格时时发生异常,fieldName={},obj={},columnIndex={}", field.getName(), JSON.toJSONString(obj), entry.getValue(), e);
             }
+        }
+    }
+
+    private void trySetField2ColumnIndexMap(T obj) {
+        if (null == this.field2ColumnIndexMap) {
+            List<Field> excelColumnFields = getExcelColumnFields(obj);
+            this.field2ColumnIndexMap = getField2ColumnIndexMap(excelColumnFields);
         }
     }
 

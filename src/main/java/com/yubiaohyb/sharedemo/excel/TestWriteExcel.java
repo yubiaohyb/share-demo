@@ -31,10 +31,10 @@ public class TestWriteExcel {
         HSSFWorkbook workbook = new HSSFWorkbook();
         HSSFSheet sheet = workbook.createSheet();
         HSSFRow row = sheet.createRow(0);
-        TestExcelVoHelper excelHelper = new TestExcelVoHelper();
+        ExcelHelper<TestExcelVo> excelHelper = new ExcelHelper<>();
         excelHelper.init(titles, row);
-        int startRow = 1;
-        excelHelper.setDataRows(excelVoes, sheet, startRow);
+        int startRowNo = 1;
+        excelHelper.setDataRows(excelVoes, sheet, startRowNo);
     }
 
 

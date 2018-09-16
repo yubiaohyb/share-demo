@@ -1,8 +1,11 @@
 package com.yubiaohyb.sharedemo.excel;
 
+import com.alibaba.fastjson.JSON;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.ss.usermodel.Cell;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.*;
 
@@ -64,10 +67,13 @@ public final class ColumnName2IndexHelper {
 
     public final class ColumnName2IndexMapper {
 
+        private Logger logger = LoggerFactory.getLogger(ColumnName2IndexMapper.class);
+
         private Map<String, List<Integer>> columnName2IndexMap;
 
         public ColumnName2IndexMapper(Map<String, List<Integer>> columnName2IndexMap) {
             this.columnName2IndexMap = columnName2IndexMap;
+            this.logger.debug("ColumnName2IndexMapper={}", JSON.toJSONString(this.columnName2IndexMap));
         }
 
         /**
