@@ -40,26 +40,26 @@ public abstract class ExcelHelper<T> {
 
     public void init(List<String> titles, HSSFRow row) {
         setTitles(titles, row);
-        columnName2IndexMapper = ColumnName2IndexHelper.getColumnName2IndexMapper(row);
+        this.columnName2IndexMapper = ColumnName2IndexHelper.getColumnName2IndexMapper(row);
         List<Field> excelColumnFields = getExcelColumnFields();
-        this.field2ColumnIndexMap = getField2ColumnIndexMap(columnName2IndexMapper, excelColumnFields);
+        this.field2ColumnIndexMap = getField2ColumnIndexMap(excelColumnFields);
         this.titlesSetted = true;
     }
 
-    private Map<Field, Integer> getField2ColumnIndexMap(ColumnName2IndexHelper.ColumnName2IndexMapper columnName2IndexMapper, List<Field> excelColumnFields) {
+    private Map<Field, Integer> getField2ColumnIndexMap(List<Field> excelColumnFields) {
         Map<Field, Integer> field2ColumnIndexMap = new HashMap<>();
         for (Field field : excelColumnFields) {
-            int columnIndex = getColumnIndex(columnName2IndexMapper, field);
+            int columnIndex = getColumnIndex(field);
             field2ColumnIndexMap.put(field, columnIndex);
         }
         return field2ColumnIndexMap;
     }
 
-    private int getColumnIndex(ColumnName2IndexHelper.ColumnName2IndexMapper columnName2IndexMapper, Field field) {
+    private int getColumnIndex(Field field) {
         ExcelColumn excelColumn = field.getAnnotation(ExcelColumn.class);
         String columnName = excelColumn.name();
         int sameNameIndex = excelColumn.sameNameIndex();
-        int columnIndex = columnName2IndexMapper.tryGetColumnIndexByName(columnName, sameNameIndex);
+        int columnIndex = this.columnName2IndexMapper.tryGetColumnIndexByName(columnName, sameNameIndex);
         this.logger.debug("ExcelColumn(name = {}, sameNameIndex = {}), Field(name={}, columnIndex={}, class={})", columnName, sameNameIndex, field.getName(), columnIndex, field.getType());
         return columnIndex;
     }
