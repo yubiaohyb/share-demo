@@ -1,4 +1,4 @@
-package com.yubiaohyb.sharedemo.vo;
+package com.yubiaohyb.sharedemo.excel;
 
 import com.yubiaohyb.sharedemo.annotation.ExcelColumn;
 import lombok.Data;
