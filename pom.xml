@@ -85,6 +85,21 @@
                 <configuration>
                     <connectionType>developerConnection</connectionType>
                 </configuration>
+                <executions>
+                    <execution>
+                        <id>add-version-to-git</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>add</goal>
+                            <goal>checkin</goal>
+                        </goals>
+                        <configuration>
+                            <basedir>./</basedir>
+                            <includes>versions/*</includes>
+                            <message>[Add Version to git]</message>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
