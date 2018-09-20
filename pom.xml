@@ -96,7 +96,7 @@
                         <configuration>
                             <basedir>./</basedir>
                             <includes>versions/*</includes>
-                            <message>[Add Version to git]</message>
+                            <message>测试</message>
                         </configuration>
                     </execution>
                 </executions>
