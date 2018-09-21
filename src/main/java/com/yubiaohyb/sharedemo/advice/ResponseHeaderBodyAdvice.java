@@ -18,8 +18,12 @@ import java.io.IOException;
 /**
  * 人若志趣不远，心不在焉，虽学不成。
  * <p>
+ *     借助ResponseBodyAdvice实现对响应结果的自定义。
+ *     这里结合注解ResponseHeader实现对响应头部分contentType和contentPosition属性的设置，
+ *     并完成响应体的数据流写入。
+ * </p>
  *
- * description  -  响应头切面
+ * description  -  响应自定义切面
  *
  * @author Yubiao Huang (https://github.com/yubiaohyb)
  * @version $$Id$$

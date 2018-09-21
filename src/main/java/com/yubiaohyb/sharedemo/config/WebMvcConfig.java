@@ -12,6 +12,11 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 /**
  * 人若志趣不远，心不在焉，虽学不成。
  * <p>
+ *     这个版本的spring中已经将WebMvcConfigurer标记为过时，所以替换掉。
+ *     但是如果继承WebMvcConfigurationSupport的话会导致spring boot自动配置的失效，
+ *     详细参照WebMvcAutoConfiguration。
+ * </p>
+ *
  * description  -  web mvc配置
  *
  * @author Yubiao Huang (https://github.com/yubiaohyb)
