@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.format.FormatterRegistry;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 /**
  * 人若志趣不远，心不在焉，虽学不成。
@@ -21,7 +21,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 @Configuration
 @EnableWebMvc
 @ComponentScan(value = {"com.yubiaohyb.sharedemo.controller", "com.yubiaohyb.sharedemo.format"})
-public class WebMvcConfig extends WebMvcConfigurerAdapter {
+public class WebMvcConfig implements WebMvcConfigurer {
 
     @Autowired
     private DateEndTimeAnnotationFormatterFactory dateEndTimeAnnotationFormatterFactory;
@@ -34,7 +34,6 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
     @Override
     public void addFormatters(FormatterRegistry registry) {
         registry.addFormatterForFieldAnnotation(dateEndTimeAnnotationFormatterFactory);
-        super.addFormatters(registry);
     }
 
 }

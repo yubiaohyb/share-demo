@@ -1,7 +1,6 @@
 package com.yubiaohyb.sharedemo.advice;
 
 import com.yubiaohyb.sharedemo.annotation.ResponseHeader;
-import java.io.IOException;
 import org.apache.poi.POIDocument;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,15 +12,18 @@ import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 
+import java.io.IOException;
+
 /**
- * Copyright(C) 2018 Toowel Network Technology Co., Ltd. All rights reserved.
- *
+ * 人若志趣不远，心不在焉，虽学不成。
+ * <p>
  * description  -  响应头切面
  *
  * @author Yubiao Huang (https://github.com/yubiaohyb)
  * @version $$Id$$
- * @since 2018/9/21 11:25
+ * @since 2018/9/21 10:43
  */
+
 @RestControllerAdvice(basePackages="com.yubiaohyb.sharedemo.controller")
 public class ResponseHeaderAdvice implements ResponseBodyAdvice<Object> {
 

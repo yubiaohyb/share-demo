@@ -1,13 +1,13 @@
 package com.yubiaohyb.sharedemo.generator;
 
 /**
- * Copyright(C) 2018 Toowel Network Technology Co., Ltd. All rights reserved.
- *
+ * 人若志趣不远，心不在焉，虽学不成。
+ * <p>
  * description  -  抽象文件名称生成器（暂时无用）
  *
  * @author Yubiao Huang (https://github.com/yubiaohyb)
  * @version $$Id$$
- * @since 2018/9/21 17:16
+ * @since 2018/9/21 10:43
  */
 public abstract class AbstractFileNameGenerator implements FileNameGenerator {
 
