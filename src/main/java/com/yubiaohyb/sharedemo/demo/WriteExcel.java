@@ -1,19 +1,16 @@
 package com.yubiaohyb.sharedemo.demo;
 
-import static com.yubiaohyb.sharedemo.demo.ExcelConstant.AGE;
-import static com.yubiaohyb.sharedemo.demo.ExcelConstant.NAME;
-import static com.yubiaohyb.sharedemo.demo.ExcelConstant.SEQUENCE_NO;
-
-import java.util.ArrayList;
-import java.util.List;
-
+import com.yubiaohyb.sharedemo.excel.ExcelHelper;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.yubiaohyb.sharedemo.excel.ExcelHelper;
+import java.util.ArrayList;
+import java.util.List;
+
+import static com.yubiaohyb.sharedemo.demo.ExcelConstant.*;
 
 /**
  * 人若志趣不远，心不在焉，虽学不成。
@@ -42,9 +39,7 @@ public class WriteExcel {
     }
 
     public static HSSFWorkbook getNewWorkbook()  {
-
         HSSFWorkbook workbook = new HSSFWorkbook();
-        HSSFSheet sheet = workbook.createSheet();
         return workbook;
     }
 
