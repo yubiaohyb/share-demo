@@ -1,8 +1,13 @@
 package com.yubiaohyb.sharedemo.controller;
 
 import com.yubiaohyb.sharedemo.annotation.DateEndTime;
+import com.yubiaohyb.sharedemo.annotation.ResponseHeader;
+import com.yubiaohyb.sharedemo.demo.WriteExcel;
 import com.yubiaohyb.sharedemo.form.DateEndTimeTestForm;
-import com.yubiaohyb.sharedemo.thread.TestAbstractElegantThread;
+import java.io.IOException;
+import java.util.Date;
+import javax.servlet.http.HttpServletResponse;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.validation.BindingResult;
@@ -11,8 +16,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.Date;
 
 /**
  * 人若志趣不远，心不在焉，虽学不成。
@@ -54,18 +57,22 @@ public class TestController1 {
     }
 
     @GetMapping("/test3")
-    public String test3(@DateEndTime Date date) {
+    public void test3(@DateEndTime Date date) {
         LOGGER.debug("invoke test3");
         System.out.println(date);
-        return "successs";
     }
 
+    @ResponseHeader(fileName = "543.xls")
     @GetMapping("/test4")
-    public String test4() {
+    public HSSFWorkbook test4() {
         LOGGER.debug("invoke test4");
-        TestAbstractElegantThread elegantThread = new TestAbstractElegantThread();
-        elegantThread.run();
-        return "successs";
+        return WriteExcel.getWorkbook();
     }
 
+    @GetMapping("/test5")
+    public void test5(HttpServletResponse response) throws IOException {
+        response.setContentType("application/octet-stream; charset=utf-8");
+        response.setHeader("Content-Disposition", String.format("attachment;fileName=%s.xls", "123"));
+        WriteExcel.getWorkbook().write(response.getOutputStream());
+    }
 }
