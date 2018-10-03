@@ -4,14 +4,14 @@ share-demo
 项目使用springboot2.0.4为基础框架，jdk1.8作为运行环境。
 ### *内容简介*
 >#### 注解
-* @NotNullLabel(#NotNullLabel) 对@NotNull进行了优化，只需指定属性名即可
-* @DateEndTime 将页面请求传递的日期参数（yyyy-MM-dd）转换为Date类型值（yyyy-MM-dd 23:59:59.999）
-* @ExcelColumn 标记对象属性在excel中对应的列标题，用于简化excel生成逻辑
-* @ResponseHeader 自定义响应头，用于减少文件下载时响应头部信息和响应体输入的硬编码
+* [@NotNullLabel](#NotNullLabel) 对@NotNull进行了优化，只需指定属性名即可
+* [@DateEndTime](#DateEndTime) 将页面请求传递的日期参数（yyyy-MM-dd）转换为Date类型值（yyyy-MM-dd 23:59:59.999）
+* [@ExcelColumn](#ExcelColumn) 标记对象属性在excel中对应的列标题，用于简化excel生成逻辑
+* [@ResponseHeader](#ResponseHeader) 自定义响应头，用于减少文件下载时响应头部信息和响应体输入的硬编码
 
 ### *具体实现*
 >#### 注解
-##### @NotNullLabel[NotNullLabel]
+##### @NotNullLabel
 ###### 背景
     相信大家对@NotNull及其他的校验注解并不陌生，也肯定有过这样的想法：每次指定message时，不仅要指定属性名称，还要附加“不能为空”之类的废话。既然如此，那我们就来优化一下。
 ###### 核心类
