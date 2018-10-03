@@ -6,8 +6,8 @@ share-demo
 >#### 注解
 * [@NotNullLabel](#notnulllabel) 对@NotNull进行了优化，只需指定属性名即可
 * [@DateEndTime](#dateendtime) 将页面请求传递的日期参数（yyyy-MM-dd）转换为Date类型值（yyyy-MM-dd 23:59:59.999）
-* [@ExcelColumn](#@excelcolumn) 标记对象属性在excel中对应的列标题，用于简化excel生成逻辑
-* [@ResponseHeader](#@responseheader) 自定义响应头，用于减少文件下载时响应头部信息和响应体输入的硬编码
+* [@ExcelColumn](#excelcolumn) 标记对象属性在excel中对应的列标题，用于简化excel生成逻辑
+* [@ResponseHeader](#responseheader) 自定义响应头，用于减少文件下载时响应头部信息和响应体输入的硬编码
 
 ### *具体实现*
 >#### 注解
@@ -46,7 +46,8 @@ public @interface NotNullLabel {
     如上，仿照@NotNull注解，这里我添加了label属性用于指定属性名，同时message属性和原来的用法一致。字段校验如果发现为null，首先检查message属性是否为空，如果不为空，则提示此message信息。否则提示“{属性名}不能为空”。具体逻辑查看NotNullLabelAnnotationValidator。
 ###### 思考
     @NotBlank/@NotEmpty等注解的类似实现，各位看官自行脑补。
-##### <span id="DateEndTime">@DateEndTime</span>
+    
+##### @DateEndTime
 ###### 背景
      在数据统计场景中，经常需要指定的起止日期。我们在接收前端请求表单时，对日期字段的接收，通常是使用Stirng或Date类型。而在使用Mybatis作为数据访问层时，会遇到一些问题：如果底层是Oracle数据库，那字符串不能直接作为日期，必须进行转换，或在DAO接口前人为转换类型，或在写xml配置时特别指定转换器。如果一开始表单中使用Date类型，那这也是可以避免的。但是还有另一个问题需要注意：精确到每天的最后时刻即23:59:59.999。通常来说，我们可以在参数表单接收后进行处理，代码行处理抑或是在mybatis的xml中进行sql运算都可以。但实际上这样并不优雅，很快我们就会发现逻辑中类似的代码块到处都是，给人一种bad smell。相信了解spring的同学都会意识到，这是一个切面性的问题，那么这里来看一下我的处理。
 ###### 核心类
@@ -59,6 +60,28 @@ public @interface NotNullLabel {
 ###### 思考
     DateEndTimeFormatter中在转换失败时，会抛出异常，可以通过BindingResult获取到。
 也可以选择使用校验类型的注解完成此项工作，只是相对比较乱，不符合单一责任原则。
+
+##### @ExcelColumn
+###### 背景
+     开发中有时候会有excel导出的需要，如果没有成熟的工具，一个单元格一个单元格的勉强还可以接受，但是一旦遇到导出列非常多的情况时，那就不好办法了。如果需求突然说，帮我加几个列/这几个列调一下位置的时候，不知道你心里有多少个草泥马？那么作为程序员，我们是不是可以动动脑经，让自己少生点气，多活两年呢？看一下我这里提供的实现：
+###### 核心类
+    ExcelColumn/ColumnName2IndexHelper/ExcelHelper
+###### 思路
+```java
+public @interface ExcelColumn {
+
+    String name();
+
+    int sameNameIndex() default 0;
+
+}
+```
+    这里我设置了两个属性：name用于指定excel中列标题的名称；sameNameIndex如果存在多个相同的列标题名称时用于区分具体的先后顺序。
+    ExcelHelper是整个实现的核心：
+    1.ExcelHelper在实例化后，调用init方法完成对excel列标题的设置；
+    2.调用setDataRows完成数据的写入，在此过程执行之前会借助ColumnName2IndexHelper解析出列标题的序号与对象属性之间的对应关系。
+###### 思考
+    ExcelHelper目前只适合于简单对象集合的处理，对于复杂对象暂时没有提供比较好的处理方式，因此将ColumnName2IndexHelper独立出来方便使用。
 
 ### *联系方式*
 >电子邮箱：<971449932@qq.com>
