@@ -1,22 +1,14 @@
 share-demo
 ====
-个人学习分享
-----
-项目使用springboot2.0.4为基础框架，jdk1.8作为运行环境。<br>
+个人学习分享<br>
+项目使用springboot2.0.4为基础框架，jdk1.8作为运行环境。
 ### *内容简介*
 #### 注解
-@DateEndTime<br>
-@ExcelColumn<br>
-@NotNullLabel<br>
-@ResponseHeader<br>
-|列名1|列名2|
-|:---|:---|
-|列1的内容1|列2的内容1|
-|列1的内容2|列2的内容2|
-. @DateEndTime
-. @ExcelColumn
-. @NotNullLabel
-. @ResponseHeader
+* @DateEndTime 接收http请求传递的日期参数（格式：yyyy-MM-dd），并最终转换为：yyyy-MM-dd 23:59:59.999的Date值。
+* @ExcelColumn 标记对象属性在excel中对应的列标题
+* @NotNullLabel 对@NotNull进行了优化，只需指定属性即可
+* @ResponseHeader 自定义响应头，用于简化文件下载时的响应头部信息设置。
+
 
 联系方式<br>
 电子邮箱：<971449932@qq.com>
