@@ -69,7 +69,7 @@ public @interface NotNullLabel {
 ###### 思考
     DateEndTimeFormatter中在转换失败时，会抛出异常，可以通过BindingResult获取到。
 也可以选择使用校验类型的注解完成此项工作，只是相对比较乱，不符合单一责任原则。
-
+-
 ##### @ExcelColumn
 ###### 背景
      开发中有时候会有excel导出的需要，如果没有成熟的工具，一个单元格一个单元格的勉强还可以接受，但是一旦遇到导出列非常多的情况时，那就不好办法了。
