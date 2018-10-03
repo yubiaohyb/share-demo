@@ -9,7 +9,7 @@ share-demo
 * [@ExcelColumn](#excelcolumn) 标记对象属性在excel中对应的列标题，用于简化excel生成逻辑
 * [@ResponseHeader](#responseheader) 自定义响应头，用于减少文件下载时响应头部信息和响应体输入的硬编码
 >#### 多线程
-* [AbstractElegantThread](#abstractelegantthread) 对@NotNull进行了优化，只需指定属性名即可
+* [AbstractElegantThread](#abstractelegantthread) 对Thread进行了封装，简化异常捕捉处理
 
 
 ### *具体实现*
