@@ -114,8 +114,9 @@ public @interface ExcelColumn {
         } catch (Exception e) {
             handleException(e);
         }
-    }```
-    这里我进行了一层简单的封装：
+    }
+```
+    这里我对Thread类进行了一层简单的封装：
     final修饰run方法，使其不能被子类修改；
     提供了两个hook方法：runElegantly和handleException和一个日志对象。
 ###### 思考
