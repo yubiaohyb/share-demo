@@ -8,6 +8,9 @@ share-demo
 * [@DateEndTime](#dateendtime) 将页面请求传递的日期参数（yyyy-MM-dd）转换为Date类型值（yyyy-MM-dd 23:59:59.999）
 * [@ExcelColumn](#excelcolumn) 标记对象属性在excel中对应的列标题，用于简化excel生成逻辑
 * [@ResponseHeader](#responseheader) 自定义响应头，用于减少文件下载时响应头部信息和响应体输入的硬编码
+>#### 多线程
+* [AbstractElegantThread](#abstractelegantthread) 对@NotNull进行了优化，只需指定属性名即可
+
 
 ### *具体实现*
 >#### 注解
@@ -93,7 +96,31 @@ public @interface ExcelColumn {
     2.调用setDataRows完成数据的写入，在此过程执行之前会借助ColumnName2IndexHelper解析出列标题的序号与对象属性之间的对应关系。
 ###### 思考
     ExcelHelper目前只适合于简单对象集合的处理，对于复杂对象暂时没有提供比较好的处理方式，因此将ColumnName2IndexHelper独立出来方便使用。
+---
+>#### 多线程
+##### AbstractElegantThread
+###### 背景
+     多线程调用出现异常，如果不进行异常捕捉，发生问题经常会不知道具体哪里出了问题。如果重复去catch异常也显得不是那么美观。
+###### 核心类
+    AbstractElegantThread
+###### 思路
+```java
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
+    @Override
+    public final void run() {
+        try {
+            runElegantly();
+        } catch (Exception e) {
+            handleException(e);
+        }
+    }```
+    这里我进行了一层简单的封装：
+    final修饰run方法，使其不能被子类修改；
+    提供了两个hook方法：runElegantly和handleException和一个日志对象。
+###### 思考
+    类名意味优雅线程，但事实并不是的优雅，具体业务里的资源释放等，还是需要在使用时自己解决。
+    
 ### *联系方式*
 >电子邮箱：<971449932@qq.com>
 
