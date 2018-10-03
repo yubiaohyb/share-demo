@@ -17,7 +17,32 @@ share-demo
 ###### 核心类
     NotNullLabel/NotNullLabelAnnotationValidator
 ###### 思路
+```java
+@Target({ElementType.METHOD, ElementType.FIELD, ElementType.ANNOTATION_TYPE, ElementType.CONSTRUCTOR,
+        ElementType.PARAMETER})
+@Retention(RetentionPolicy.RUNTIME)
+@Documented
+@Constraint(validatedBy = {NotNullLabelAnnotationValidator.class})
+public @interface NotNullLabel {
 
+    String label();
+
+    String message() default "";
+
+    Class<?>[] groups() default {};
+
+    Class<? extends Payload>[] payload() default {};
+
+    @Target({ElementType.METHOD, ElementType.FIELD, ElementType.ANNOTATION_TYPE, ElementType.CONSTRUCTOR,
+            ElementType.PARAMETER})
+    @Retention(RetentionPolicy.RUNTIME)
+    @Documented
+    @interface List {
+
+        NotNullLabel[] value();
+    }
+}
+```
     如上，仿照@NotNull注解，这里我添加了label属性用于指定属性名，同时message属性和原来的用法一致。字段校验如果发现为null，首先检查message属性是否为空，如果不为空，则提示此message信息。否则提示“{属性名}不能为空”。具体逻辑查看NotNullLabelAnnotationValidator。
 ###### 思考
     @NotBlank/@NotEmpty等注解的类似实现，各位看官自行脑补。
