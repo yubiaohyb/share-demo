@@ -97,6 +97,66 @@ public @interface ExcelColumn {
 ###### 思考
     ExcelHelper目前只适合于简单对象集合的处理，对于复杂对象暂时没有提供比较好的处理方式，因此将ColumnName2IndexHelper独立出来方便使用。
 ---
+##### @ResponseHeader
+###### 背景
+     spring社区的各位大佬确实伟大。但是难免有考虑不到的地方，让人觉得sb。就比如在下面这段代码，不知道你会不会看着就烦：
+     // TODO 待补充
+     如果只需要通过一个注解，设置一下该有多好。
+###### 核心类
+    ResponseHeader/ResponseHeaderBodyAdvice
+###### 思路
+```java
+public @interface ResponseHeader {
+
+    String mediaTypeValue() default MediaType.APPLICATION_OCTET_STREAM_VALUE;
+
+    String fileName();
+
+}
+```
+    这里直接使用的spring中定义好的MediaType来指定媒介类型；
+    fileName顾名思义就是文件名。
+    将注解标注在控制器路径映射的公共方法上，设置好文件名（没有特别需要，默认类型就很好）。
+    在控制器方法执行完成进行响应体填充前，会被ResponseHeaderBodyAdvice拦截，然后就下面这段代码：
+ ```java
+     @Override
+    public Object beforeBodyWrite(Object obj, MethodParameter returnType, MediaType mediaType,
+        Class aClass, ServerHttpRequest serverHttpRequest, ServerHttpResponse serverHttpResponse) {
+        Assert.notNull(obj, "ResponseHeader注解的方法返回值不允许为null");
+        ResponseHeader responseHeader = getResponseHeader(returnType);
+        String mediaTypeValue = responseHeader.mediaTypeValue();
+        String fileName = responseHeader.fileName();
+        if (mediaTypeValue.equals(MediaType.APPLICATION_OCTET_STREAM_VALUE)) {
+            serverHttpResponse.getHeaders().setContentType(MediaType.APPLICATION_OCTET_STREAM);
+            serverHttpResponse.getHeaders().setContentDispositionFormData("attachment", fileName);
+            if (obj instanceof POIDocument) {
+                try {
+                    ((POIDocument) obj).write(serverHttpResponse.getBody());
+                    return null;
+                } catch (IOException e) {
+                    LOGGER.error("数据写入响应体失败", e);
+                }
+            }
+        }
+        return obj;
+    }
+ ```
+    方法根据媒介类型等来决定是自行处理响应，还是交由框架继续处理。
+    来看一下调用的地方：
+ ```java
+     @ResponseHeader(fileName = "543.xls")
+    @GetMapping("/test4")
+    public HSSFWorkbook test4() {
+        LOGGER.debug("invoke test4");
+        return WriteExcel.getWorkbook();
+    }
+```
+    是不是看起来很清爽～
+
+###### 思考
+    目前文件名的生成还不是动态的，后续有时间再考虑实现下。
+
+---
 >#### 多线程
 ##### AbstractElegantThread
 ###### 背景
