@@ -49,7 +49,7 @@ public @interface NotNullLabel {
     具体逻辑查看NotNullLabelAnnotationValidator。
 ###### 思考
     @NotBlank/@NotEmpty等注解的类似实现，各位看官自行脑补。
-----    
+-  
 ##### @DateEndTime
 ###### 背景
      在数据统计场景中，经常需要指定的起止日期。我们在接收前端请求表单时，对日期字段的接收，通常是使用Stirng或Date类型。
@@ -68,7 +68,7 @@ public @interface NotNullLabel {
     3.将DateEndTimeAnnotationFormatterFactory注入到应用上下文的Formatters列表中。
 ###### 思考
     DateEndTimeFormatter中在转换失败时，会抛出异常，可以通过BindingResult获取到。
-也可以选择使用校验类型的注解完成此项工作，只是相对比较乱，不符合单一责任原则。
+    也可以选择使用校验类型的注解完成此项工作，只是相对比较乱，不符合单一责任原则。
 -
 ##### @ExcelColumn
 ###### 背景
