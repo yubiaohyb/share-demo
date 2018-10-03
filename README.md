@@ -99,7 +99,7 @@ public @interface ExcelColumn {
 ---
 ##### @ResponseHeader
 ###### 背景
-     spring社区的各位大佬确实伟大。但是难免有考虑不到的地方，让人觉得sb。就比如在下面这段代码，不知道你会不会看着就烦：
+     spring社区的各位大佬确实伟大。但是难免有考虑不到的地方，让人觉得sb。就比如下面这段代码，不知道你会不会看着就烦：
      // TODO 待补充
      如果只需要通过一个注解，设置一下该有多好。
 ###### 核心类
@@ -116,7 +116,7 @@ public @interface ResponseHeader {
 ```
     这里直接使用的spring中定义好的MediaType来指定媒介类型；
     fileName顾名思义就是文件名。
-    将注解标注在控制器路径映射的公共方法上，设置好文件名（没有特别需要，默认类型就很好）。
+    将注解标注在控制器路径映射的公共方法上，设置好文件名（没有特别需要的话，默认类型就很好）。
     在控制器方法执行完成进行响应体填充前，会被ResponseHeaderBodyAdvice拦截，然后就下面这段代码：
  ```java
      @Override
@@ -144,7 +144,7 @@ public @interface ResponseHeader {
     方法根据媒介类型等来决定是自行处理响应，还是交由框架继续处理。
     来看一下调用的地方：
  ```java
-     @ResponseHeader(fileName = "543.xls")
+    @ResponseHeader(fileName = "543.xls")
     @GetMapping("/test4")
     public HSSFWorkbook test4() {
         LOGGER.debug("invoke test4");
