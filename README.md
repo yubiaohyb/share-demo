@@ -12,13 +12,17 @@ share-demo
 ### *具体实现*
 >#### 注解
 @DateEndTime
->背景：在数据统计场景中，经常需要根据指定的起止日期。我们在接收前端的请求表单时，对日期字段的接收类型，通常是使用Stirng或Date。在使用Mybatis作为数据访问层时，会遇到一些问题：如果底层是Oracle数据库的话，那么我们不能直接使用字符串作为日期，必须进行转换，或在DAO接口前人为转换类型，或在写xml配置的时候特别指定转换器。如果一开始表单中使用Date类型的字段的话，这也是可以避免的。但是还有另一个需要特别注意：精确到每天的最后时刻即23:59:59.999。我们可以在参数表单接收后进行处理，代码行处理抑或是在mybatis的xml中进行sql运算。但实际上这样处理，并不优雅，很快我们就会发现逻辑中这样的代码块到处都是，给人一种bad smell。相信了解spring的同学都会意识到，这是一个切面性的问题，那么来看一下我这里是如何解决。
->核心类：DateEndTimeFormatter/DateEndTimeAnnotationFormatterFactory
->思路：这里我的灵感来自于@NotNull注解，当前这是一个校验注解，而我的@DateEndTime则是位于请求参数解析，进行字段赋值的阶段。
+背景
+>在数据统计场景中，经常需要根据指定的起止日期。我们在接收前端的请求表单时，对日期字段的接收类型，通常是使用Stirng或Date。在使用Mybatis作为数据访问层时，会遇到一些问题：如果底层是Oracle数据库的话，那么我们不能直接使用字符串作为日期，必须进行转换，或在DAO接口前人为转换类型，或在写xml配置的时候特别指定转换器。如果一开始表单中使用Date类型的字段的话，这也是可以避免的。但是还有另一个需要特别注意：精确到每天的最后时刻即23:59:59.999。我们可以在参数表单接收后进行处理，代码行处理抑或是在mybatis的xml中进行sql运算。但实际上这样处理，并不优雅，很快我们就会发现逻辑中这样的代码块到处都是，给人一种bad smell。相信了解spring的同学都会意识到，这是一个切面性的问题，那么来看一下我这里是如何解决。
+核心类
+>DateEndTimeFormatter/DateEndTimeAnnotationFormatterFactory
+思路
+>这里我的灵感来自于@NotNull注解，当前这是一个校验注解，而我的@DateEndTime则是位于请求参数解析，进行字段赋值的阶段。
 1.通过注解完成对HTTP请求传来的日期字符串转换成Date类型，并设置到当天的最后一刻，这里交给DateEndTimeFormatter实现；
 2.通过自定义注解@DateEndTime，并通过DateEndTimeAnnotationFormatterFactory将注解与Formatter关联起来；
 3.将DateEndTimeAnnotationFormatterFactory注入到应用上下文的Formatters列表中。
->思考：DateEndTimeFormatter中在转换失败时，会抛出异常，可以通过BindingResult获取到。
+思考
+>DateEndTimeFormatter中在转换失败时，会抛出异常，可以通过BindingResult获取到。
 也可以选择使用校验类型的注解完成此项工作，只是相对比较乱，不符合单一责任原则。
 
 ### *联系方式*
