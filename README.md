@@ -53,9 +53,9 @@ public @interface NotNullLabel {
     DateEndTimeFormatter/DateEndTimeAnnotationFormatterFactory
 ###### 思路
     这里我的灵感来自于@NotNull注解，当然这是一个校验注解，而我的@DateEndTime则是类型转换注解，发生在后者的前面。
-1.通过注解完成对HTTP请求传来的日期字符串转换成Date类型，并设置到当天的最后一刻，这里交给DateEndTimeFormatter实现；
-2.通过自定义注解@DateEndTime，并通过DateEndTimeAnnotationFormatterFactory将注解与Formatter关联起来；
-3.将DateEndTimeAnnotationFormatterFactory注入到应用上下文的Formatters列表中。
+    1.通过注解完成对HTTP请求传来的日期字符串转换成Date类型，并设置到当天的最后一刻，这里交给DateEndTimeFormatter实现；
+    2.通过自定义注解@DateEndTime，并通过DateEndTimeAnnotationFormatterFactory将注解与Formatter关联起来；
+    3.将DateEndTimeAnnotationFormatterFactory注入到应用上下文的Formatters列表中。
 ###### 思考
     DateEndTimeFormatter中在转换失败时，会抛出异常，可以通过BindingResult获取到。
 也可以选择使用校验类型的注解完成此项工作，只是相对比较乱，不符合单一责任原则。
