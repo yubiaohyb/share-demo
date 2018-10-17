@@ -1,5 +1,8 @@
 package com.yubiaohyb.sharedemo.thread;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * 人若志趣不远，心不在焉，虽学不成。
  * <p>
@@ -14,6 +17,11 @@ package com.yubiaohyb.sharedemo.thread;
  * @since 2018/9/15 上午1:02
  */
 public abstract class AbstractElegantThread extends Thread {
+
+    /**
+     * 供子类使用
+     */
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Override
     public final void run() {
@@ -37,4 +45,5 @@ public abstract class AbstractElegantThread extends Thread {
      * @param e
      */
     protected abstract void handleException(Exception e);
+
 }
