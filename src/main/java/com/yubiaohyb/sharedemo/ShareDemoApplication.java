@@ -17,5 +17,6 @@ public class ShareDemoApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(ShareDemoApplication.class, args);
+
     }
 }
