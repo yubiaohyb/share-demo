@@ -15,7 +15,8 @@ public class SortTest {
 //        Sort sort = new SelectionSort();
 //        Sort sort = new InsertionSort();
 //        Sort sort = new BubbleSort();
-        Sort sort = new QuickSort();
+//        Sort sort = new QuickSort();
+        Sort sort = new ShellSort();
         double[] arr = new double[]{11.0, 3.0, 22.0, 44.0, 1.0, 13.0};
         System.out.println(JSON.toJSONString(arr));
         sort.sort(arr);

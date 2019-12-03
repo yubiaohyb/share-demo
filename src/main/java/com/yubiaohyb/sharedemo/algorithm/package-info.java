@@ -11,7 +11,7 @@
  * <br/>高效排序
  * <ul>
  * <li/>梳排序({@link com.yubiaohyb.sharedemo.algorithm.BubbleSort}) todo
- * <li/>希尔排序({@link com.yubiaohyb.sharedemo.algorithm.InsertionSort}) todo
+ * <li/>希尔排序({@link com.yubiaohyb.sharedemo.algorithm.ShellSort})
  * <li/>快速排序({@link com.yubiaohyb.sharedemo.algorithm.QuickSort})
  * <li/>堆排序({@link com.yubiaohyb.sharedemo.algorithm.SelectionSort})// TODO: 2019/12/3
  * </ul>
@@ -20,7 +20,8 @@
  * <ul>
  * <li/>归并排序({@link com.yubiaohyb.sharedemo.algorithm.MergeSort})
  * <li/>基数排序({@link com.yubiaohyb.sharedemo.algorithm.InsertionSort})todo
- * <li/>计数排序({@link com.yubiaohyb.sharedemo.algorithm.SelectionSort})</ul>
+ * <li/>计数排序({@link com.yubiaohyb.sharedemo.algorithm.SelectionSort})todo
+ * </ul>
  * </p>
  *
  * @author Yubiao Huang (https://github.com/yubiaohyb)
