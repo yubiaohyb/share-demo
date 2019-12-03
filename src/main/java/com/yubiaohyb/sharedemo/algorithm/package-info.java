@@ -4,7 +4,7 @@
  * <p>
  * 基础排序
  * <ul>
- * <li/>冒泡排序({@link com.yubiaohyb.sharedemo.algorithm.BubbleSort})
+ * <li/>冒泡排序({@link com.yubiaohyb.sharedemo.algorithm.BubbleSort}和{@link com.yubiaohyb.sharedemo.algorithm.OptimizedBubbleSort})
  * <li/>插入排序({@link com.yubiaohyb.sharedemo.algorithm.InsertionSort})
  * <li/>选择排序({@link com.yubiaohyb.sharedemo.algorithm.SelectionSort})</ul>
  *
