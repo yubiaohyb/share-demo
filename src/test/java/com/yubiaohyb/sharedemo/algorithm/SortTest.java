@@ -12,15 +12,19 @@ import com.alibaba.fastjson.JSON;
 public class SortTest {
 
     public static void main(String[] args) {
-//        Sort sort = new SelectionSort();
-//        Sort sort = new InsertionSort();
-//        Sort sort = new BubbleSort();
-//        Sort sort = new QuickSort();
-//        Sort sort = new ShellSort();
-        Sort sort = new OptimizedBubbleSort();
-        double[] arr = new double[]{11.0, 3.0, 22.0, 44.0, 1.0, 13.0};
+        double[] arr = new double[]{11.0, 3.0, 1000.0, 22.0, 300.0, 44.0, 1.0, 13.0, 100.0};
         System.out.println(JSON.toJSONString(arr));
-        sort.sort(arr);
+//        SortUtils.bubbleSort(arr);
+//        SortUtils.insertionSort(arr);
+//        SortUtils.selectionSort(arr);
+
+//        SortUtils.shellSort(arr);
+//        SortUtils.combSort(arr);
+
+//        SortUtils.quickSort(arr);
+//        SortUtils.radixSort(arr);
+        SortUtils.countSort(arr);
+
         System.out.println(JSON.toJSONString(arr));
     }
 

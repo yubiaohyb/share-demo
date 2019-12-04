@@ -13,10 +13,10 @@ public class QuickSort extends AbstractSort {
 
     @Override
     public void sort(double[] arr) {
-        doSort(arr, 0, arr.length-1);
+        sort(arr, 0, arr.length-1);
     }
 
-    private void doSort(double[] arr, int indexI, int indexJ) {
+    public void sort(double[] arr, int indexI, int indexJ) {
         int markIndex=indexI;
         for (int i=indexI; i<=indexJ; i++) {
             if (i == markIndex) {
@@ -29,8 +29,8 @@ public class QuickSort extends AbstractSort {
                 //需要注意游标前移
                 markIndex++;
             }
-            doSort(arr, indexI, markIndex-1);
-            doSort(arr, markIndex+1, indexJ);
+            sort(arr, indexI, markIndex-1);
+            sort(arr, markIndex+1, indexJ);
         }
     }
 
