@@ -13,7 +13,7 @@
  * <li/>梳排序({@link com.yubiaohyb.sharedemo.algorithm.CombSort})
  * <li/>希尔排序({@link com.yubiaohyb.sharedemo.algorithm.ShellSort})
  * <li/>快速排序({@link com.yubiaohyb.sharedemo.algorithm.QuickSort})
- * <li/>堆排序({@link com.yubiaohyb.sharedemo.algorithm.SelectionSort})// TODO: 2019/12/3
+ * <li/>堆排序({@link com.yubiaohyb.sharedemo.algorithm.HeapSort})
  * </ul>
  *
  * <br/>空间换时间排序
@@ -23,6 +23,16 @@
  * <li/>计数排序({@link com.yubiaohyb.sharedemo.algorithm.CountSort})
  * </ul>
  * </p>
+ *
+ * 术语
+ * 稳定排序：在数组中a==b，且a在b的前面，经过排序后a仍然保持在b的前面
+ * 非稳定排序：与上面相反
+ * 原地排序：数组在排序过程中，不申请多余空间，仅使用已有的内存进行数据的比较与交换
+ * 非原地排序：需要使用辅助数组来完成排序
+ * 时间复杂度：算法执行所需消耗的时间
+ * 空间复杂度：算法执行所需消耗的空间
+ *
+ * 个人理解：算法的稳定性与算法的具体实现细节有一定关系
  *
  * @author Yubiao Huang (https://github.com/yubiaohyb)
  * @version $$Id$$

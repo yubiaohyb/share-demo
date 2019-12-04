@@ -17,6 +17,7 @@ public final class SortUtils {
     private final static ShellSort SHELL_SORT = new ShellSort();
     private final static RadixSort RADIX_SORT = new RadixSort();
     private final static CountSort COUNT_SORT = new CountSort();
+    private final static HeapSort HEAP_SORT = new HeapSort();
     
     public static void bubbleSort(double[] arr) {
         BUBBLE_SORT.sort(arr);
@@ -60,5 +61,9 @@ public final class SortUtils {
 
     public static void countSort(double[] arr) {
         COUNT_SORT.sort(arr);
+    }
+
+    public static void heapSort(double[] arr) {
+        HEAP_SORT.sort(arr);
     }
 }

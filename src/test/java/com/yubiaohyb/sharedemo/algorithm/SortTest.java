@@ -20,10 +20,11 @@ public class SortTest {
 
 //        SortUtils.shellSort(arr);
 //        SortUtils.combSort(arr);
+        SortUtils.heapSort(arr);
 
 //        SortUtils.quickSort(arr);
 //        SortUtils.radixSort(arr);
-        SortUtils.countSort(arr);
+//        SortUtils.countSort(arr);
 
         System.out.println(JSON.toJSONString(arr));
     }
