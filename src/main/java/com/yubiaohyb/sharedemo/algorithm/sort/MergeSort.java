@@ -1,4 +1,4 @@
-package com.yubiaohyb.sharedemo.algorithm;
+package com.yubiaohyb.sharedemo.algorithm.sort;
 
 /**
  * description  -  归并排序

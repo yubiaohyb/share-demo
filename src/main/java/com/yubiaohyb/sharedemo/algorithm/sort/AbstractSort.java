@@ -1,4 +1,4 @@
-package com.yubiaohyb.sharedemo.algorithm;
+package com.yubiaohyb.sharedemo.algorithm.sort;
 
 /**
  * description  -  单数组抽象排序类
