@@ -5,6 +5,8 @@ package com.yubiaohyb.sharedemo.algorithm;
  *
  * 核心思想：按照最大（或小）堆组织规则填充数据，然后将极值移到一端，再对剩余元素重新排序，往复循环
  *
+ * 空间复杂度：O(n)
+ * 时间复杂度（平均）：O(n*logn)
  *
  * @author Yubiao Huang (https://github.com/yubiaohyb)
  * @version $$Id$$

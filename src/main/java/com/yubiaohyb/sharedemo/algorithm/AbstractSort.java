@@ -1,13 +1,16 @@
 package com.yubiaohyb.sharedemo.algorithm;
 
 /**
- * description  -  数组元素间互换
+ * description  -  单数组抽象排序类
+ *
+ * 简单封装了一个数据元素互换位置的方法
  *
  * @author Yubiao Huang (https://github.com/yubiaohyb)
  * @version $$Id$$
  * @since 2019/12/3 10:38
  */
 abstract class AbstractSort implements Sort {
+
     protected void swap(double[] arr, int indexI, int indexJ) {
 
 //        arr[indexI] = arr[indexI] + arr[indexJ];

@@ -5,6 +5,9 @@ package com.yubiaohyb.sharedemo.algorithm;
  *
  * 核心思想：在冒泡排序基础上，添加是否已经有序标记，如果已经有序，则跳出后续循环
  *
+ * 空间复杂度：O(n)
+ * 时间复杂度（平均）：O(n^2)
+ *
  * @author Yubiao Huang (https://github.com/yubiaohyb)
  * @version $$Id$$
  * @since 2019/12/3 19:14

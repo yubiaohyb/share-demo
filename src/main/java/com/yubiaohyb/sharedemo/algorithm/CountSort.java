@@ -5,6 +5,9 @@ package com.yubiaohyb.sharedemo.algorithm;
  *
  * 核心思想：获取数组的上下边界，构建辅助数组，利用其下标统计源数据组，并完成排序
  *
+ * 空间复杂度：不确定，可能远大于O(n)，且记为O(N)
+ * 时间复杂度（平均）：O(N)
+ *
  * @author Yubiao Huang (https://github.com/yubiaohyb)
  * @version $$Id$$
  * @since 2019/12/4 11:16

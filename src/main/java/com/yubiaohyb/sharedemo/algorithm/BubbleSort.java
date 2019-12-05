@@ -5,6 +5,9 @@ package com.yubiaohyb.sharedemo.algorithm;
  *
  * 核心思想：循环依次将较小（或较大）值移动至一端
  *
+ * 空间复杂度：O(n)
+ * 时间复杂度（平均）：O(n^2)
+ *
  * @author Yubiao Huang (https://github.com/yubiaohyb)
  * @version $$Id$$
  * @since 2019/12/3 13:02

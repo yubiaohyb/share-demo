@@ -5,6 +5,9 @@ package com.yubiaohyb.sharedemo.algorithm;
  *
  * 核心思想：默认初始集合有序，循环扩展下标，纳入新元素，再与前面有序元素比较决定排序
  *
+ * 空间复杂度：O(n)
+ * 时间复杂度(平均)：O(n^2)
+ *
  * @author Yubiao Huang (https://github.com/yubiaohyb)
  * @version $$Id$$
  * @since 2019/12/3 12:38

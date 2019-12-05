@@ -5,6 +5,9 @@ package com.yubiaohyb.sharedemo.algorithm;
  *
  * 核心思想：两个数组两个游标，依次比较后，将值置入新的数组中，需要注意循环结束后的剩余元素
  *
+ * 空间复杂度：O(n)
+ * 时间复杂度：O(n)
+ *
  * @author Yubiao Huang (https://github.com/yubiaohyb)
  * @version $$Id$$
  * @since 2019/12/3 14:37
