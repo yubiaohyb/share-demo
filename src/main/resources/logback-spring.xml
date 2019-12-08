@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
+    <include resource="org/springframework/boot/logging/logback/base.xml"/>
+
     <!-- %m输出的信息,%p日志级别,%t线程名,%d日期,%c类的全名,%i索引【从数字0开始递增】,,, -->
     <!-- appender是configuration的子节点，是负责写日志的组件。 -->
     <!-- ConsoleAppender：把日志输出到控制台 -->
@@ -37,6 +39,11 @@
             <charset>UTF-8</charset>
         </encoder>
     </appender>
+    <appender name="LOGSTASH" class="net.logstash.logback.appender.LogstashTcpSocketAppender">
+        <destination>localhost:5044</destination>
+        <encoder charset="UTF-8" class="net.logstash.logback.encoder.LogstashEncoder"/>
+    </appender>
+
     <!-- 控制台输出日志级别 -->
     <root level="DEBUG">
         <appender-ref ref="STDOUT"/>
@@ -45,7 +52,7 @@
     <!-- com.liyan为根包，也就是只要是发生在这个根包下面的所有日志操作行为的权限都是DEBUG -->
     <!-- 级别依次为【从高到低】：FATAL > ERROR > WARN > INFO > DEBUG > TRACE  -->
     <logger name="com.yubiaohyb.sharedemo.controller" level="DEBUG">
-        <appender-ref ref="demolog"/>
+        <appender-ref ref="LOGSTASH"/>
     </logger>
 </configuration>
 

@@ -1,12 +1,10 @@
 package com.yubiaohyb.sharedemo.controller;
 
+import com.alibaba.fastjson.JSON;
 import com.yubiaohyb.sharedemo.annotation.DateEndTime;
 import com.yubiaohyb.sharedemo.annotation.ResponseHeader;
 import com.yubiaohyb.sharedemo.demo.WriteExcel;
 import com.yubiaohyb.sharedemo.form.DateEndTimeTestForm;
-import java.io.IOException;
-import java.util.Date;
-import javax.servlet.http.HttpServletResponse;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,6 +14,13 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import java.io.IOException;
+import java.util.Date;
 
 /**
  * 人若志趣不远，心不在焉，虽学不成。
@@ -30,6 +35,23 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/test1")
 public class TestController1 {
     private static final Logger LOGGER = LoggerFactory.getLogger(TestController1.class);
+
+
+    @GetMapping("/session")
+    public String session(HttpServletRequest request) {
+
+        Cookie[] cookies = request.getCookies();
+
+        HttpSession session = request.getSession();
+
+        for (Cookie cookie : cookies) {
+            System.out.println(cookie);
+        }
+        System.out.println(JSON.toJSONString(session));
+        session.setAttribute("testAttr", "this is a test content.");
+        return "SUCCESS";
+
+    }
 
     /**
      *
