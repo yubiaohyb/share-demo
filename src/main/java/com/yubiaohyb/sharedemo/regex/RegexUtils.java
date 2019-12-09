@@ -46,4 +46,16 @@ public final class RegexUtils {
     public static String replaceAll(String value, String pattern, String replacement) {
         return value.replaceAll(pattern, replacement);
     }
+
+    public static List<String> getGroupList(String value, String pattern) {
+        Pattern PATTERN = Pattern.compile(pattern);
+        Matcher matcher = PATTERN.matcher(value);
+        List<String> list = new ArrayList<>();
+        if(matcher.matches()) {
+            for(int i=1; i<=matcher.groupCount(); i++) {
+                list.add(matcher.group(i));
+            }
+        }
+        return list;
+    }
 }
