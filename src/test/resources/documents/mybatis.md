@@ -67,12 +67,77 @@ List<String> children = VFS.getInstance().list(path);
 4、方法命名方式值得参考，类似于我在商品打标用的命名
 ``` java
 addIfMatching(test, child);
+
+hasTypeHandlerForResultObject(rsw, resultMap.getType());
 ```
 
 5、我是否也能注意到这种map访问限制细节？
 ``` java
   public Map<String, Class<?>> getTypeAliases() {
     return Collections.unmodifiableMap(TYPE_ALIASES);
+  }
+```
+
+6、注意上下文ErrorContext
+``` java
+ErrorContext.instance().resource(ms.getResource()).activity("executing a query").object(ms.getId());4
+```
+在关键方法的调用开始，都会调用ErrorContext记录当前所处阶段上下文，在发生异常时，进行输出
+拓展开来还能做什么？
+
+7、RoutingStatementHandler使用了委派模式（静态代理+策略模式），忘了的时候可以再回顾下
+``` java
+public class RoutingStatementHandler implements StatementHandler {
+
+  private final StatementHandler delegate;
+
+  public RoutingStatementHandler(Executor executor, MappedStatement ms, Object parameter, RowBounds rowBounds, ResultHandler resultHandler, BoundSql boundSql) {
+
+    switch (ms.getStatementType()) {
+      case STATEMENT:
+        delegate = new SimpleStatementHandler(executor, ms, parameter, rowBounds, resultHandler, boundSql);
+        break;
+      case PREPARED:
+        delegate = new PreparedStatementHandler(executor, ms, parameter, rowBounds, resultHandler, boundSql);
+        break;
+      case CALLABLE:
+        delegate = new CallableStatementHandler(executor, ms, parameter, rowBounds, resultHandler, boundSql);
+        break;
+      default:
+        throw new ExecutorException("Unknown statement type: " + ms.getStatementType());
+    }
+
+  }
+```
+
+8、有泛型成员方法的类，类并不一定也要带泛型参数
+``` java
+public interface StatementHandler {
+
+  Statement prepare(Connection connection, Integer transactionTimeout) throws SQLException;
+
+  void parameterize(Statement statement) throws SQLException;
+
+  void batch(Statement statement) throws SQLException;
+
+  int update(Statement statement) throws SQLException;
+
+  <E> List<E> query(Statement statement, ResultHandler resultHandler) throws SQLException;
+
+  <E> Cursor<E> queryCursor(Statement statement) throws SQLException;
+
+  BoundSql getBoundSql();
+
+  ParameterHandler getParameterHandler();
+}
+```
+
+9、InterceptorChain的拦截处理
+
+10、SqlNode的组合设计模式
+``` java
+  public class ForEachSqlNode implements SqlNode {
+    private SqlNode contents;
   }
 ```
 
