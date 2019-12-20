@@ -111,7 +111,7 @@ public class RoutingStatementHandler implements StatementHandler {
 ```
 
 8、有泛型成员方法的类，类并不一定也要带泛型参数
-``` java
+```java
 public interface StatementHandler {
 
   Statement prepare(Connection connection, Integer transactionTimeout) throws SQLException;
@@ -132,7 +132,62 @@ public interface StatementHandler {
 }
 ```
 
-9、InterceptorChain的拦截处理
+9、InterceptorChain配合Plugin的拦截处理，动态代理
+```java
+public class InterceptorChain {
+  private final List<Interceptor> interceptors = new ArrayList<Interceptor>();
+  public Object pluginAll(Object target) {
+    for (Interceptor interceptor : interceptors) {
+      target = interceptor.plugin(target);
+    }
+    return target;
+  }
+  //ignore
+}
+```
+```java
+public class Plugin implements InvocationHandler {
+
+  private final Object target;
+  private final Interceptor interceptor;
+  private final Map<Class<?>, Set<Method>> signatureMap;
+
+  private Plugin(Object target, Interceptor interceptor, Map<Class<?>, Set<Method>> signatureMap) {
+    this.target = target;
+    this.interceptor = interceptor;
+    this.signatureMap = signatureMap;
+  }
+
+  public static Object wrap(Object target, Interceptor interceptor) {
+    Map<Class<?>, Set<Method>> signatureMap = getSignatureMap(interceptor);
+    Class<?> type = target.getClass();
+    Class<?>[] interfaces = getAllInterfaces(type, signatureMap);
+    if (interfaces.length > 0) {
+      return Proxy.newProxyInstance(
+          type.getClassLoader(),
+          interfaces,
+          new Plugin(target, interceptor, signatureMap));
+    }
+    return target;
+  }
+
+  @Override
+  public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+    try {
+      Set<Method> methods = signatureMap.get(method.getDeclaringClass());
+      if (methods != null && methods.contains(method)) {
+        return interceptor.intercept(new Invocation(target, method, args));
+      }
+      return method.invoke(target, args);
+    } catch (Exception e) {
+      throw ExceptionUtil.unwrapThrowable(e);
+    }
+  }
+  //ignore...
+}
+```
+
+
 
 10、SqlNode的组合设计模式
 ``` java
@@ -141,3 +196,102 @@ public interface StatementHandler {
   }
 ```
 
+11、MapperBuilderAssistant的内部方法的组织方式以及构造器实现方式值得学习思考
+``` java
+    return new ParameterMapping.Builder(configuration, property, javaTypeClass)
+        .jdbcType(jdbcType)
+        .resultMapId(resultMap)
+        .mode(parameterMode)
+        .numericScale(numericScale)
+        .typeHandler(typeHandlerInstance)
+        .build();
+```
+
+12、MapperProxy和MapperProxyFactory的动态代理和工厂模式的组合，以及内部缓存的设计
+```java
+public class MapperProxyFactory<T> {
+
+  private final Class<T> mapperInterface;
+  private final Map<Method, MapperMethod> methodCache = new ConcurrentHashMap<Method, MapperMethod>();
+  //ignore
+  protected T newInstance(MapperProxy<T> mapperProxy) {
+    return (T) Proxy.newProxyInstance(mapperInterface.getClassLoader(), new Class[] { mapperInterface }, mapperProxy);
+  }
+  //ignore
+}
+```
+
+13、SqlSessionFactory接口定义赏析
+```java
+public interface SqlSessionFactory {
+
+  SqlSession openSession();
+
+  SqlSession openSession(boolean autoCommit);
+  SqlSession openSession(Connection connection);
+  SqlSession openSession(TransactionIsolationLevel level);
+
+  SqlSession openSession(ExecutorType execType);
+  SqlSession openSession(ExecutorType execType, boolean autoCommit);
+  SqlSession openSession(ExecutorType execType, TransactionIsolationLevel level);
+  SqlSession openSession(ExecutorType execType, Connection connection);
+
+  Configuration getConfiguration();
+
+}
+```
+为什么SqlSession是接口，而Configuration却是实体类？
+
+14、SqlSessionManager提供了接口SqlSessionFactory和SqlSession的组合
+```java
+public class SqlSessionManager implements SqlSessionFactory, SqlSession {
+
+  private final SqlSessionFactory sqlSessionFactory;
+  private final SqlSession sqlSessionProxy;
+
+  private final ThreadLocal<SqlSession> localSqlSession = new ThreadLocal<SqlSession>();
+
+  private SqlSessionManager(SqlSessionFactory sqlSessionFactory) {
+    this.sqlSessionFactory = sqlSessionFactory;
+    this.sqlSessionProxy = (SqlSession) Proxy.newProxyInstance(
+        SqlSessionFactory.class.getClassLoader(),
+        new Class[]{SqlSession.class},
+        new SqlSessionInterceptor());
+  }
+
+  public static SqlSessionManager newInstance(Reader reader) {
+    return new SqlSessionManager(new SqlSessionFactoryBuilder().build(reader, null, null));
+  }
+  //ignore
+  
+   private class SqlSessionInterceptor implements InvocationHandler {
+     public SqlSessionInterceptor() {
+         // Prevent Synthetic Access
+     }
+ 
+     @Override
+     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+       final SqlSession sqlSession = SqlSessionManager.this.localSqlSession.get();
+       if (sqlSession != null) {
+         try {
+           return method.invoke(sqlSession, args);
+         } catch (Throwable t) {
+           throw ExceptionUtil.unwrapThrowable(t);
+         }
+       } else {
+         try (SqlSession autoSqlSession = openSession()) {
+           try {
+             final Object result = method.invoke(autoSqlSession, args);
+             autoSqlSession.commit();
+             return result;
+           } catch (Throwable t) {
+             autoSqlSession.rollback();
+             throw ExceptionUtil.unwrapThrowable(t);
+           }
+         }
+       }
+     }
+   }
+}  
+```
+这里为什么添加了属性localSqlSession？
