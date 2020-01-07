@@ -1,0 +1,19 @@
+@startuml
+title bean的实际创建过程
+
+group AbstractAutowireCapableBeanFactory
+start
+partition doCreateBean(...) {
+  :createBeanInstance(...);
+  :applyMergedBeanDefinitionPostProcessors(...);
+  :populateBean(...);
+  note left:属性注入(Autowired等)
+  :initializeBean(...);
+  note left:bean的初始化:\n   invokeAwareMethods\n   applyBeanPostProcessorsBeforeInitialization\n   invokeInitMethods\n   applyBeanPostProcessorsAfterInitialization
+  :饥饿实例化依赖检查;
+  :registerDisposableBeanIfNecessary(...);
+}
+partition ... {
+  stop
+}
+@enduml

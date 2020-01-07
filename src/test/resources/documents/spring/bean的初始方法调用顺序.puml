@@ -1,0 +1,18 @@
+@startuml
+title bean的初始化调用顺序
+group AbstractAutowireCapableBeanFactory
+start
+partition invokeInitMethods(...) {
+
+  if (mbd is InitializingBean) then (yes)
+    :afterPropertiesSet(...);
+  endif
+  if (mbd has initMethodName) then (yes)
+    :invokeCustomInitMethod(...);
+    note left:反射调用initMethod
+  endif
+}
+partition ... {
+  stop
+}
+@enduml

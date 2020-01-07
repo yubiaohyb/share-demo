@@ -21,7 +21,6 @@ public class JavassitTest {
         ClassPool pool = ClassPool.getDefault();
 
         try {
-
             CtClass cc = pool.get("test.Rectangle");
             cc.setSuperclass(pool.get("test.Point"));
             cc.writeFile();

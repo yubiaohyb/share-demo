@@ -1,0 +1,20 @@
+@startuml
+title bean实例的创建
+group AbstractAutowireCapableBeanFactory
+start
+partition createBeanInstance(...) {
+
+  if (mbd has Supplier) then
+    :obtainFromSupplier(...);
+  elseif (mbd is FactoryMethod) then
+    :instantiateUsingFactoryMethod(...);
+  elseif (mbd is autowireConstructor) then
+    :autowireConstructor(...);
+  else
+    :instantiateBean(...);
+  endif
+}
+partition ... {
+  stop
+}
+@enduml

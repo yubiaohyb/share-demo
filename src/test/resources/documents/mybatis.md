@@ -15,6 +15,7 @@ private static Map<Integer, JdbcType> codeLookup = new HashMap();
       }
   }
 ```
+
 2、ResolverUtil
 在里面有个只有一个matches()方法的Test接口，这种写法类似于之前我在天猫导购中的做法，都是传递接口的方式来泛化判断
 ``` java
@@ -187,8 +188,6 @@ public class Plugin implements InvocationHandler {
 }
 ```
 
-
-
 10、SqlNode的组合设计模式
 ``` java
   public class ForEachSqlNode implements SqlNode {
@@ -220,6 +219,7 @@ public class MapperProxyFactory<T> {
   //ignore
 }
 ```
+为什么会多出来一个MapperProxyFactory？
 
 13、SqlSessionFactory接口定义赏析
 ```java

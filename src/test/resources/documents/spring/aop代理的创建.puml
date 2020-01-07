@@ -1,0 +1,20 @@
+@startuml
+title aop代理的创建
+
+group AbstractAutoProxyCreator
+partition postProcessAfterInitialization(...) {
+  start
+}
+partition wrapIfNecessary(...) {
+  :getAdvicesAndAdvisorsForBean(...);
+}
+partition createProxy(...) {
+  :设置ProxyFactory;
+}
+
+group ProxyFactory
+partition getProxy(...) {
+  :createAopProxy().getProxy(classLoader);
+  stop
+}
+@enduml

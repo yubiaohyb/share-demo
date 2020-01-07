@@ -1,0 +1,15 @@
+@startuml
+title bean的创建过程
+group AbstractAutowireCapableBeanFactory
+start
+:createBean(Class<T> beanClass);
+partition createBean(beanName-mbd-args) {
+  :Class<?> resolvedClass = resolveBeanClass(mbd, beanName);
+  :mbdToUse.prepareMethodOverrides();
+  :Object bean = resolveBeforeInstantiation(beanName, mbdToUse);
+  if (bean == null) then (yes)
+    :Object beanInstance = doCreateBean(beanName, mbdToUse, args);
+  endif
+stop
+}
+@enduml

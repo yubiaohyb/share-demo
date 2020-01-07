@@ -2,6 +2,7 @@ package com.yubiaohyb.sharedemo;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 
 /**
  * 人若志趣不远，心不在焉，虽学不成。
