@@ -8,16 +8,16 @@ package com.yubiaohyb.sharedemo.algorithm.sort;
  * @since 2019/12/3 19:53
  */
 public final class SortUtils {
-    private final static BubbleSort BUBBLE_SORT = new BubbleSort();
-    private final static CombSort COMB_SORT = new CombSort();
-    private final static InsertionSort INSERTION_SORT = new InsertionSort();
-    private final static OptimizedBubbleSort OPTIMIZED_BUBBLE_SORT = new OptimizedBubbleSort();
-    private final static QuickSort QUICK_SORT = new QuickSort();
-    private final static SelectionSort SELECTION_SORT = new SelectionSort();
-    private final static ShellSort SHELL_SORT = new ShellSort();
-    private final static RadixSort RADIX_SORT = new RadixSort();
-    private final static CountSort COUNT_SORT = new CountSort();
-    private final static HeapSort HEAP_SORT = new HeapSort();
+    private static final BubbleSort BUBBLE_SORT = new BubbleSort();
+    private static final CombSort COMB_SORT = new CombSort();
+    private static final InsertionSort INSERTION_SORT = new InsertionSort();
+    private static final OptimizedBubbleSort OPTIMIZED_BUBBLE_SORT = new OptimizedBubbleSort();
+    private static final QuickSort QUICK_SORT = new QuickSort();
+    private static final SelectionSort SELECTION_SORT = new SelectionSort();
+    private static final ShellSort SHELL_SORT = new ShellSort();
+    private static final RadixSort RADIX_SORT = new RadixSort();
+    private static final CountSort COUNT_SORT = new CountSort();
+    private static final HeapSort HEAP_SORT = new HeapSort();
     
     public static void bubbleSort(double[] arr) {
         BUBBLE_SORT.sort(arr);
