@@ -1,0 +1,12 @@
+@startuml
+title BeanWrapper中bean属性的填充
+group AbstractAutowireCapableBeanFactory
+:BeanWrapper非空处理;
+:尝试在属性注入前进行自定义字段注入(postProcessAfterInstantiation(...))，\n如果有，则不再进行后续处理;
+:按名称或按类型的自动注入;
+:尝试属性增强处理(postProcessPropertyValues(...));
+note left: Autowired、@Value注入等
+:尝试依赖检查;
+:尝试设置属性值(applyPropertyValues);
+note left:实际就是为BeanWrapper设置属性
+@enduml
