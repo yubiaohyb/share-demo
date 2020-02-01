@@ -3,6 +3,11 @@ share-demo
 个人学习分享<br>
 项目使用springboot2.0.4为基础框架，jdk1.8作为运行环境。
 ### *内容简介*
+#### 设计模式
+[设计原则](./src/test/resources/documents/designpattern/设计原则.md)
+[UML类图](./src/test/resources/documents/designpattern/UML类图.md)
+[设计模式](./src/test/resources/documents/designpattern/设计模式.md)
+
 >#### 注解
 * [@NotNullLabel](#notnulllabel) 对@NotNull进行了优化，只需指定属性名即可
 * [@DateEndTime](#dateendtime) 将页面请求传递的日期参数（yyyy-MM-dd）转换为Date类型值（yyyy-MM-dd 23:59:59.999）
