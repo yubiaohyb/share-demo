@@ -42,3 +42,7 @@ share-demo
 ### *联系方式*
 >电子邮箱：<971449932@qq.com>
         
+|设备|管理地址|用户|密码|wifi密码|
+-:|:-:|:-:|:-:|:-
+|TP-LINK|192.168.10.1||yubiaohyb1992|yubiaohyb|
+|LENOVO|192.168.10.1||yubiaohyb1992|yubiaohyb|
