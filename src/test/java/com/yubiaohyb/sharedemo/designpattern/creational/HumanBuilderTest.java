@@ -14,7 +14,7 @@ public class HumanBuilderTest {
 
     @Test
     public void test() {
-        HumanBuilder humanBuilder = new ActualHumanBuilder();
+        HumanBuilder humanBuilder = new ConcreteHumanBuilder();
         Human human = humanBuilder.withEyes("小眼睛").withNose("扁鼻子").build();
         System.out.println(human.toString());
 
@@ -23,7 +23,7 @@ public class HumanBuilderTest {
     }
 
 
-    class ActualHumanBuilder implements HumanBuilder {
+    class ConcreteHumanBuilder implements HumanBuilder {
 
         private String mouth;
 
