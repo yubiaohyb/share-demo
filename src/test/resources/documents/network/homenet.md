@@ -2,7 +2,7 @@
 
 |设备|管理地址|用户|密码|wifi密码|
 -:|:-:|:-:|:-:|:-
-|TP-LINK|192.168.10.1||${name}1992|${name}|
-|LENOVO|192.168.11.1|admin|password|${name}|
+|TP-LINK|192.168.10.1||ORZ1992|ORZ|
+|LENOVO|192.168.11.1|admin|password|ORZ|
 
 ### 住处网络
