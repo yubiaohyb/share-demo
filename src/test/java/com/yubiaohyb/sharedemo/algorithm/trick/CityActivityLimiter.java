@@ -27,8 +27,6 @@ public class CityActivityLimiter {
 
     public CityActivityLimiter(int limitCount) {this.limitCount = limitCount;}
 
-
-
     public static void  test(CityActivityLimiter limiter2) {
         for (;;) {
             Long activityId = RandomUtils.nextLong(1L, 20L);
@@ -80,39 +78,59 @@ public class CityActivityLimiter {
         }
         Map<Integer, List<ActivityPeriod>> activityCountMap = cityActivityCountMap.get(activity.getCityId());
         for (int i = limitCount-1; i > 0; i--) {
-            if (activityCountMap.containsKey(i)) {
-                List<Activity> remainedActivities = Arrays.asList(activity);
-                List<ActivityPeriod> specifiedCountActivities = activityCountMap.get(i);
-                Map<Long, ActivityPeriod> collect = specifiedCountActivities.stream().collect(Collectors.toMap(ActivityPeriod::getBeginAt, activityPeriod -> activityPeriod));
-                List<ActivityPeriod> copiedCountActivities = cloneActivityPeriods(specifiedCountActivities);
-                for (ActivityPeriod copiedActivityPeriod : copiedCountActivities) {
-                    ActivityHandleResult handleResult = strateger.handleActivities(copiedActivityPeriod, remainedActivities);
-                    PostHandleResult postHandleResult = postProcessHandleResult(handleResult, new PostProcessContext(activity, activityCountMap, i));
-                    if (postHandleResult.isContinued()) {
-                        remainedActivities = postHandleResult.getRemainedActivities();
-                    }
-                    return;
+            if (!activityCountMap.containsKey(i)) {
+               continue;
+            }
+            List<Activity> remainedActivities = Arrays.asList(activity);
+            List<ActivityPeriod> specifiedCountActivities = activityCountMap.get(i);
+            Map<Long, ActivityPeriod> collect = specifiedCountActivities.stream().collect(Collectors.toMap(ActivityPeriod::getBeginAt, activityPeriod -> activityPeriod));
+            List<ActivityPeriod> copiedCountActivities = cloneActivityPeriods(specifiedCountActivities);
+            for (ActivityPeriod copiedActivityPeriod : copiedCountActivities) {
+                ActivityHandleResult handleResult = strateger.handleActivities(copiedActivityPeriod, remainedActivities);
+                PostHandleResult postHandleResult = postProcessHandleResult(handleResult, new PostProcessContext(activity, activityCountMap, i));
+                if (postHandleResult.isContinued()) {
+                    remainedActivities = postHandleResult.getRemainedActivities();
+                    continue;
                 }
+                return;
             }
         }
     }
 
     private PostHandleResult postProcessHandleResult(ActivityHandleResult handleResult, PostProcessContext context) {
+
+        if (handleResult.getRisedPeriods().isEmpty()) {
+            return postProcessHandleResultRemainedActivities(handleResult, context);
+        }
+
+        postProcessHandleResultRisedActivities(handleResult, context);
+
+        //已经没有时间碎片
+        if (handleResult.getRemainedActivities().isEmpty()) {
+            Activity activity = context.getActivity();
+            activityCityMap.put(activity.getActivityId(), activity.getCityId());
+            return new PostHandleResult(null, false);
+        }
+
+        return postProcessHandleResultRemainedActivities(handleResult, context);
+    }
+
+    private PostHandleResult postProcessHandleResultRemainedActivities(ActivityHandleResult handleResult, PostProcessContext context) {
+        List<Activity> remainedActivities = handleResult.getRemainedActivities();
+        if (1 == context.getCount()) {
+            context.getActivityCountMap().get(1).addAll(getActivityPeriods(remainedActivities));
+            Activity activity = context.getActivity();
+            activityCityMap.put(activity.getActivityId(), activity.getCityId());
+            return new PostHandleResult(null, false);
+        }
+        return new PostHandleResult(remainedActivities, true);
+    }
+
+    private void postProcessHandleResultRisedActivities(ActivityHandleResult handleResult, PostProcessContext context) {
         Activity activity = context.getActivity();
         Map<Integer, List<ActivityPeriod>> activityCountMap = context.getActivityCountMap();
         int i = context.getCount();
-
-        if (handleResult.getRisedPeriods().isEmpty()) {
-            List<Activity> remainedActivities = handleResult.getRemainedActivities();
-            if (1 == i) {
-                activityCountMap.get(i).addAll(getActivityPeriods(remainedActivities));
-                activityCityMap.put(activity.getActivityId(), activity.getCityId());
-                return new PostHandleResult(null, false);
-            }
-            return new PostHandleResult(remainedActivities, true);
-        }
         //上浮
-
         if (i + 1 >= limitCount) {
             System.out.println(JSON.toJSONString(cityActivityCountMap));
             System.out.println(activity.getCityId() + ":" + i + ":" + JSON.toJSONString(handleResult.getRisedPeriods()));
@@ -131,21 +149,14 @@ public class CityActivityLimiter {
         if (!handleResult.getRemainedPeriods().isEmpty()) {
             activityPeriods.addAll(handleResult.getRemainedPeriods());
         }
-
-        //已经没有时间碎片
-        if (handleResult.getRemainedActivities().isEmpty()) {
-            activityCityMap.put(activity.getActivityId(), activity.getCityId());
-            return new PostHandleResult(null, false);
-        }
-
-        List<Activity> remainedActivities = handleResult.getRemainedActivities();
-        if (1 == i) {
-            activityCountMap.get(i).addAll(getActivityPeriods(remainedActivities));
-            activityCityMap.put(activity.getActivityId(), activity.getCityId());
-            return new PostHandleResult(null, false);
-        }
-        return new PostHandleResult(remainedActivities, true);
     }
 }
 
-
+/**
+ * 待解决的bug
+ * {"activityId":7,"beginAt":2,"cityId":4,"endAt":30}
+ * {"activityId":14,"beginAt":17,"cityId":2,"endAt":36}
+ * {"activityId":2,"beginAt":18,"cityId":2,"endAt":36}
+ * {"activityId":7,"beginAt":6,"cityId":2,"endAt":28}
+ * Exception in thread "main" java.lang.IllegalStateException: Duplicate key ActivityPeriod(activityIds=[14], beginAt=17, endAt=36)
+ */
