@@ -77,8 +77,8 @@ public class ActivityCountStrateger {
     //-------------- 处理逻辑
 
     private ActivityHandleResult handleIncludeActivityNone(List<ActivityPeriod> remainedPeriods, ActivityPeriod activityPeriod, Activity activity) {
-        replacedPeriods = remainedPeriods;
-        return new ActivityHandleResult(null, null, Arrays.asList(activity));
+        this.remainedPeriods = remainedPeriods;
+        return new ActivityHandleResult(null, Arrays.asList(activity), null);
     }
 
     private ActivityPeriod newActivityPeriod(List<Long> activityIds, Long activityId, long beginAt, long endAt) {
@@ -93,21 +93,13 @@ public class ActivityCountStrateger {
     }
 
     private void replaceRemained(List<ActivityPeriod> srcPeriods, ActivityPeriod replaced, List<ActivityPeriod> remainedPeriods, List<Activity> remainedActivities) {
-//        Map<Long, ActivityPeriod> collect = remainedPeriods.stream().collect(Collectors.toMap(ActivityPeriod::getBeginAt, remainedPeriod -> remainedPeriod));
-//        collect.remove(replaced.getBeginAt());
-//        if (null == remained) {return;}
-//        remained.forEach(remainedPeriod -> collect.put(remainedPeriod.getBeginAt(), remainedPeriod));
-//        if (!remainedPeriods.isEmpty()) {
-//            remainedPeriods.clear();
-//        }
-//        remainedPeriods.addAll(collect.values());
-        replacedPeriods = cloneActivityPeriods(srcPeriods);
-        replacedPeriods.remove(replaced);
+        this.remainedPeriods = cloneActivityPeriods(srcPeriods);
+        this.remainedPeriods.remove(replaced);
         if (null != remainedPeriods) {
-            replacedPeriods.addAll(remainedPeriods);
+            this.remainedPeriods.addAll(remainedPeriods);
         }
         
-        replacedActivities = remainedActivities;
+        this.remainedActivities = remainedActivities;
         changed = true;
 
     }
@@ -222,14 +214,20 @@ public class ActivityCountStrateger {
         return activityPeriods.stream().map(srcActivityPeriod -> srcActivityPeriod.clone()).collect(Collectors.toList());
     }
 
+    /**
+     * 我这里为什么要加这三个变量呢？
+     *
+     * 答案：------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ 因为tmd在循环的列表无法动态改变成员变量集合
+     */
+
     private boolean changed = false;
 
-    private List<ActivityPeriod> replacedPeriods;
+    private List<ActivityPeriod> remainedPeriods;
 
-    private List<Activity> replacedActivities;
+    private List<Activity> remainedActivities;
 
     private void doHandleActivity(List<Activity> activities, List<ActivityHandleResult> results) {
-        List<ActivityPeriod> clonedPeriods = cloneActivityPeriods(replacedPeriods);
+        List<ActivityPeriod> clonedPeriods = cloneActivityPeriods(remainedPeriods);
         changed = false;
         for (ActivityPeriod activityPeriod : clonedPeriods) {
             for (Activity activity : activities) {
@@ -241,19 +239,18 @@ public class ActivityCountStrateger {
         }
     }
 
-    private List<ActivityHandleResult> handleActivity(List<ActivityPeriod> remainedPeriods, ActivityPeriod activityPeriod, Activity activity) {
+    private List<ActivityHandleResult> handleActivity(ActivityPeriod activityPeriod, Activity activity) {
         List<ActivityHandleResult> results = new ArrayList<>();
-        replacedPeriods = Arrays.asList(activityPeriod);
-        replacedActivities = Arrays.asList(activity);
+        remainedPeriods = Arrays.asList(activityPeriod);
+        remainedActivities = Arrays.asList(activity);
         do {
-            doHandleActivity(replacedActivities, results);
+            doHandleActivity(remainedActivities, results);
         } while(changed);
-        remainedPeriods.addAll(replacedPeriods);
         return results;
     }
 
-    private ActivityHandleResult getMergedActivityHandleResult(List<ActivityHandleResult> activityHandleResults, List<ActivityPeriod> remainedPeriods) {
-        ActivityHandleResult mergedResult = new ActivityHandleResult(new ArrayList<>(), remainedPeriods, new ArrayList<>());
+    private ActivityHandleResult getMergedActivityHandleResult(List<ActivityHandleResult> activityHandleResults) {
+        ActivityHandleResult mergedResult = new ActivityHandleResult(new ArrayList<>(), new ArrayList<>(), remainedPeriods);
         activityHandleResults.forEach(result -> {
             if (null != result.getRisedPeriods()) { mergedResult.getRisedPeriods().addAll(result.getRisedPeriods());}
             if (null != result.getRemainedActivities()) { mergedResult.getRemainedActivities().addAll(result.getRemainedActivities());}
@@ -262,10 +259,9 @@ public class ActivityCountStrateger {
     }
 
     public ActivityHandleResult handleActivities(ActivityPeriod activityPeriod, List<Activity> activities) {
-        List<ActivityPeriod> remainedPeriods = new ArrayList<>();
-        List<ActivityHandleResult> collect = activities.stream().map(activity -> handleActivity(remainedPeriods, activityPeriod, activity))
+        List<ActivityHandleResult> collect = activities.stream().map(activity -> handleActivity(activityPeriod, activity))
                 .flatMap(Collection::stream).collect(Collectors.toList());
-        return getMergedActivityHandleResult(collect, remainedPeriods);
+        return getMergedActivityHandleResult(collect);
     }
 
     //--------------

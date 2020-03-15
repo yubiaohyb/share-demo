@@ -17,16 +17,21 @@ import java.util.List;
 public class ActivityHandleResult {
     private List<ActivityPeriod> risedPeriods;
     private List<ActivityPeriod> remainedPeriods;
-//    private List<ActivityPeriod> sinkingPeriods;
     private List<Activity> remainedActivities;
 
-    public ActivityHandleResult(List<ActivityPeriod> risedPeriods, List<ActivityPeriod> remainedPeriods, List<Activity> remainedActivities) {
+    public ActivityHandleResult(List<ActivityPeriod> risedPeriods, List<Activity> remainedActivities, List<ActivityPeriod> remainedPeriods) {
         this.risedPeriods = risedPeriods;
-        this.remainedPeriods = remainedPeriods;
-//        this.sinkingPeriods = sinkingPeriods;
         this.remainedActivities = remainedActivities;
-//        this.returnMark = returnMark;
-//        this.continueMark = continueMark;
-//        this.breakMark = breakMark;
+        this.remainedPeriods = remainedPeriods;
     }
+
+    public ActivityHandleResult(List<ActivityPeriod> risedPeriods, List<Activity> remainedActivities) {
+        new ActivityHandleResult(risedPeriods, remainedActivities, null);
+    }
+
+    public ActivityHandleResult(List<ActivityPeriod> risedPeriods) {
+        new ActivityHandleResult(risedPeriods,null);
+    }
+
+
 }
