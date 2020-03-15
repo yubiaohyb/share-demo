@@ -1,5 +1,8 @@
 package com.yubiaohyb.sharedemo.algorithm.trick;
 
+import lombok.Data;
+
+@Data
 public class Activity {
     private final Integer cityId;
     private final Long activityId;
@@ -13,19 +16,4 @@ public class Activity {
         this.endAt = endAt;
     }
 
-    public Integer getCityId() {
-        return cityId;
-    }
-
-    public Long getActivityId() {
-        return activityId;
-    }
-
-    public Long getBeginAt() {
-        return beginAt;
-    }
-
-    public Long getEndAt() {
-        return endAt;
-    }
 }

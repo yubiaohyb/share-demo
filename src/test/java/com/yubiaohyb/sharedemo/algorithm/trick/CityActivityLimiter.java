@@ -40,7 +40,7 @@ public class CityActivityLimiter {
     }
 
     public static void main(String[] args) {
-        CityActivityLimiter limiter2 = new CityActivityLimiter(3);
+        CityActivityLimiter limiter2 = new CityActivityLimiter(4);
         test(limiter2);
 
 //        limiter2.addCityActivity(new Activity(1, 6L, 7L, 34L));
@@ -79,63 +79,73 @@ public class CityActivityLimiter {
             return;
         }
         Map<Integer, List<ActivityPeriod>> activityCountMap = cityActivityCountMap.get(activity.getCityId());
-        List<Activity> sinkingActivities = Arrays.asList(activity);
         for (int i = limitCount-1; i > 0; i--) {
             if (activityCountMap.containsKey(i)) {
-                List<Activity> remainedActivities = sinkingActivities;
-                ActivityHandleResult handleResult;
+                List<Activity> remainedActivities = Arrays.asList(activity);
                 List<ActivityPeriod> specifiedCountActivities = activityCountMap.get(i);
                 Map<Long, ActivityPeriod> collect = specifiedCountActivities.stream().collect(Collectors.toMap(ActivityPeriod::getBeginAt, activityPeriod -> activityPeriod));
                 List<ActivityPeriod> copiedCountActivities = cloneActivityPeriods(specifiedCountActivities);
                 for (ActivityPeriod copiedActivityPeriod : copiedCountActivities) {
-                    handleResult = strateger.handleActivities(copiedActivityPeriod, remainedActivities);
-                    if (handleResult.getRisedPeriods().isEmpty()) {
-                        remainedActivities = handleResult.getRemainedActivities();
-                        if (1 == i) {
-                            activityCountMap.get(i).addAll(getActivityPeriods(remainedActivities));
-                            activityCityMap.put(activity.getActivityId(), activity.getCityId());
-                            return;
-                        }
-                        continue;
+                    ActivityHandleResult handleResult = strateger.handleActivities(copiedActivityPeriod, remainedActivities);
+                    PostHandleResult postHandleResult = postProcessHandleResult(handleResult, new PostProcessContext(activity, activityCountMap, i));
+                    if (postHandleResult.isContinued()) {
+                        remainedActivities = postHandleResult.getRemainedActivities();
                     }
-                    //上浮
-
-                    if (i + 1 >= limitCount) {
-                        System.out.println(JSON.toJSONString(cityActivityCountMap));
-                        System.out.println(activity.getCityId() + ":" + i + ":" + JSON.toJSONString(handleResult.getRisedPeriods()));
-                        throw new RuntimeException("超出活动数限制");
-
-                    }
-                    if (activityCountMap.containsKey(i + 1)) {
-                        activityCountMap.get(i + 1).addAll(handleResult.getRisedPeriods());
-                    }
-                    activityCountMap.put(i + 1, handleResult.getRisedPeriods());
-
-                    //替换
-//                    collect.remove(copiedActivityPeriod.getBeginAt());
-                    specifiedCountActivities.remove(copiedActivityPeriod);
-                    if (!handleResult.getRemainedPeriods().isEmpty()) {
-//                        handleResult.getRemainedPeriods().forEach(remainedPeriod -> collect.put(remainedPeriod.getBeginAt(), remainedPeriod));
-                        specifiedCountActivities.addAll(handleResult.getRemainedPeriods());
-                    }
-
-                    //已经没有时间碎片
-                    if (handleResult.getRemainedActivities().isEmpty()) {
-                        activityCityMap.put(activity.getActivityId(), activity.getCityId());
-                        return;
-                    }
-
-                    remainedActivities = handleResult.getRemainedActivities();
-                    if (1 == i) {
-                        activityCountMap.get(i).addAll(getActivityPeriods(remainedActivities));
-                        activityCityMap.put(activity.getActivityId(), activity.getCityId());
-                        return;
-                    }
+                    return;
                 }
-
             }
         }
+    }
 
-        activityCityMap.put(activity.getActivityId(), activity.getCityId());
+    private PostHandleResult postProcessHandleResult(ActivityHandleResult handleResult, PostProcessContext context) {
+        Activity activity = context.getActivity();
+        Map<Integer, List<ActivityPeriod>> activityCountMap = context.getActivityCountMap();
+        int i = context.getCount();
+
+        if (handleResult.getRisedPeriods().isEmpty()) {
+            List<Activity> remainedActivities = handleResult.getRemainedActivities();
+            if (1 == i) {
+                activityCountMap.get(i).addAll(getActivityPeriods(remainedActivities));
+                activityCityMap.put(activity.getActivityId(), activity.getCityId());
+                return new PostHandleResult(null, false);
+            }
+            return new PostHandleResult(remainedActivities, true);
+        }
+        //上浮
+
+        if (i + 1 >= limitCount) {
+            System.out.println(JSON.toJSONString(cityActivityCountMap));
+            System.out.println(activity.getCityId() + ":" + i + ":" + JSON.toJSONString(handleResult.getRisedPeriods()));
+            throw new RuntimeException("超出活动数限制");
+
+        }
+        if (activityCountMap.containsKey(i + 1)) {
+            activityCountMap.get(i + 1).addAll(handleResult.getRisedPeriods());
+        }
+        activityCountMap.put(i + 1, handleResult.getRisedPeriods());
+
+        //替换
+        List<ActivityPeriod> activityPeriods = activityCountMap.get(i);
+        List<ActivityPeriod> clonedActivityPeriods = cloneActivityPeriods(activityPeriods);
+        activityPeriods.remove(clonedActivityPeriods);
+        if (!handleResult.getRemainedPeriods().isEmpty()) {
+            activityPeriods.addAll(handleResult.getRemainedPeriods());
+        }
+
+        //已经没有时间碎片
+        if (handleResult.getRemainedActivities().isEmpty()) {
+            activityCityMap.put(activity.getActivityId(), activity.getCityId());
+            return new PostHandleResult(null, false);
+        }
+
+        List<Activity> remainedActivities = handleResult.getRemainedActivities();
+        if (1 == i) {
+            activityCountMap.get(i).addAll(getActivityPeriods(remainedActivities));
+            activityCityMap.put(activity.getActivityId(), activity.getCityId());
+            return new PostHandleResult(null, false);
+        }
+        return new PostHandleResult(remainedActivities, true);
     }
 }
+
+
