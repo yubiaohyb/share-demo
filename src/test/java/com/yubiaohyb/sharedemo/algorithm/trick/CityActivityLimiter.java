@@ -112,7 +112,6 @@ public class CityActivityLimiter {
     }
 
     private void postProcessHandleResultRisedActivities(ActivityHandleResult handleResult, PostProcessContext context) {
-        Activity activity = context.getActivity();
         Map<Integer, List<ActivitiesPeriod>> activityCountMap = context.getActivityCountMap();
         int i = context.getCount();
         //上浮
@@ -138,9 +137,9 @@ public class CityActivityLimiter {
      * 待解决的bug
      */
 
-    public static void  test(CityActivityLimiter limiter2) {
+    public static void test(CityActivityLimiter limiter2) {
         for (;;) {
-            Long activityId = RandomUtils.nextLong(1L, 20L);
+            Long activityId = RandomUtils.nextLong(1L, 10L);
             Integer cityId = RandomUtils.nextInt(1, 5);
             Long beginAt = RandomUtils.nextLong(1L, 20L);
             Long endAt = RandomUtils.nextLong(beginAt + 1, 40L);
@@ -157,9 +156,35 @@ public class CityActivityLimiter {
         System.out.println(sb.toString());
     }
 
+    private static void loopTest() {
+        for (;;) {
+            try {
+                test(new CityActivityLimiter(4));
+            } catch (Exception e) {
+                if (!"超出活动数限制".equals(e.getMessage())) {
+                    e.printStackTrace();
+                    break;
+                }
+            }
+            try {
+                Thread.sleep(200L);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            System.out.println("=====================================");
+        }
+    }
+
     public static void main(String[] args) {
         CityActivityLimiter limiter2 = new CityActivityLimiter(4);
-        test(limiter2);
+//        test(limiter2);
+//        loopTest();
+        limiter2.addCityActivity(new Activity(4, 1L, 14L, 17L));
+//        limiter2.addCityActivity(new Activity(3, 2L, 7L, 9L));
+        limiter2.addCityActivity(new Activity(4, 2L, 9L, 32L));
+//        limiter2.addCityActivity(new Activity(2, 9L, 14L, 26L));
+        limiter2.addCityActivity(new Activity(4, 8L, 13L, 39L));
+        limiter2.addCityActivity(new Activity(4, 8L, 19L, 34L));
         System.out.println();
     }
 
