@@ -52,12 +52,7 @@ public class CityActivityLimiter {
 
     private void addCityActivity(Activity activity) {
         if (containsCityActivity(activity.getCityId(), activity.getActivityId())) {return;}
-        StringBuilder sb = new StringBuilder("limiter2.addCityActivity(new Activity(")
-            .append(activity.getCityId()).append(", ")
-            .append(activity.getActivityId()).append("L, ")
-            .append(activity.getBeginAt()).append("L, ")
-            .append(activity.getEndAt()).append("L));");
-        System.out.println(sb.toString());
+        logInvokeStatement(activity);
         if (!cityActivityCountMap.containsKey(activity.getCityId())) {
             cityActivityCountMap.put(activity.getCityId(), newActivityCountMap(activity));
             return;
@@ -69,11 +64,15 @@ public class CityActivityLimiter {
                continue;
             }
             List<ActivityPeriod> specifiedCountActivities = activityCountMap.get(i);
+            //下面这行代码可以辅助排错
             Map<Long, ActivityPeriod> collect = specifiedCountActivities.stream().collect(Collectors.toMap(ActivityPeriod::getBeginAt, activityPeriod -> activityPeriod));
-            List<ActivityPeriod> copiedCountActivities = cloneActivityPeriods(specifiedCountActivities);
-            for (ActivityPeriod copiedActivityPeriod : copiedCountActivities) {
+            List<ActivityPeriod> clonedCountActivities = cloneActivityPeriods(specifiedCountActivities);
+            for (int j=0; j < clonedCountActivities.size(); j++) {
+                ActivityPeriod copiedActivityPeriod = clonedCountActivities.get(j);
+                boolean last = j == clonedCountActivities.size() - 1;
                 ActivityHandleResult handleResult = strateger.handleActivities(copiedActivityPeriod, remainedActivities);
-                PostHandleResult postHandleResult = postProcessHandleResult(handleResult, new PostProcessContext(activity, activityCountMap, i));
+                PostProcessContext context = new PostProcessContext(copiedActivityPeriod, activity, activityCountMap, i, last);
+                PostHandleResult postHandleResult = postProcessHandleResult(handleResult, context);
                 if (postHandleResult.isContinued()) {
                     remainedActivities = postHandleResult.getRemainedActivities();
                     continue;
@@ -103,7 +102,7 @@ public class CityActivityLimiter {
 
     private PostHandleResult postProcessHandleResultRemainedActivities(ActivityHandleResult handleResult, PostProcessContext context) {
         List<Activity> remainedActivities = handleResult.getRemainedActivities();
-        if (1 == context.getCount()) {
+        if (1 == context.getCount() && context.isLast()) {
             context.getActivityCountMap().get(1).addAll(getActivityPeriods(remainedActivities));
             Activity activity = context.getActivity();
             activityCityMap.put(activity.getActivityId(), activity.getCityId());
@@ -131,8 +130,8 @@ public class CityActivityLimiter {
 
         //替换
         List<ActivityPeriod> activityPeriods = activityCountMap.get(i);
-        List<ActivityPeriod> clonedActivityPeriods = cloneActivityPeriods(activityPeriods);
-        activityPeriods.removeAll(clonedActivityPeriods);
+        ActivityPeriod clonedPeriod = context.getActivityPeriod().clone();
+        activityPeriods.remove(clonedPeriod);
         if (!handleResult.getRemainedPeriods().isEmpty()) {
             activityPeriods.addAll(handleResult.getRemainedPeriods());
         }
@@ -140,11 +139,6 @@ public class CityActivityLimiter {
 
     /**
      * 待解决的bug
-     * {"activityId":7,"beginAt":2,"cityId":4,"endAt":30}
-     * {"activityId":14,"beginAt":17,"cityId":2,"endAt":36}
-     * {"activityId":2,"beginAt":18,"cityId":2,"endAt":36}
-     * {"activityId":7,"beginAt":6,"cityId":2,"endAt":28}
-     * Exception in thread "main" java.lang.IllegalStateException: Duplicate key ActivityPeriod(activityIds=[14], beginAt=17, endAt=36)
      */
 
     public static void  test(CityActivityLimiter limiter2) {
@@ -157,15 +151,20 @@ public class CityActivityLimiter {
         }
     }
 
+    private void logInvokeStatement(Activity activity) {
+        StringBuilder sb = new StringBuilder("limiter2.addCityActivity(new Activity(")
+            .append(activity.getCityId()).append(", ")
+            .append(activity.getActivityId()).append("L, ")
+            .append(activity.getBeginAt()).append("L, ")
+            .append(activity.getEndAt()).append("L));");
+        System.out.println(sb.toString());
+    }
+
     public static void main(String[] args) {
         CityActivityLimiter limiter2 = new CityActivityLimiter(4);
         test(limiter2);
 
-//        limiter2.addCityActivity(new Activity(4, 7L, 2L, 30L));
-//        limiter2.addCityActivity(new Activity(2, 14L, 17L, 36L));
-//        limiter2.addCityActivity(new Activity(2, 2L, 18L, 36L));
-//        limiter2.addCityActivity(new Activity(2, 7L, 6L, 28L));
-//        System.out.println();
+        System.out.println();
     }
 
 }

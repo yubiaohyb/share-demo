@@ -77,7 +77,7 @@ public class ActivityCountStrateger {
     //-------------- 处理逻辑
 
     private ActivityHandleResult handleIncludeActivityNone(ActivityPeriod activityPeriod, Activity activity) {
-        return new ActivityHandleResult(null, null, null);
+        return null;
     }
 
     private ActivityPeriod newActivityPeriod(List<Long> activityIds, Long activityId, long beginAt, long endAt) {
@@ -237,7 +237,10 @@ public class ActivityCountStrateger {
         changed = false;
         for (ActivityPeriod activityPeriod : clonedPeriods) {
             for (Activity activity : clonedActivities) {
-                results.add(dohandleActivity(activityPeriod, activity));
+                ActivityHandleResult handleResult = dohandleActivity(activityPeriod, activity);
+                if (null != handleResult) {
+                    results.add(handleResult);
+                }
                 if (changed) {
                     return;
                 }
