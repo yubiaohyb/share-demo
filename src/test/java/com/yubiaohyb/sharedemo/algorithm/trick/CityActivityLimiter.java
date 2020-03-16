@@ -52,7 +52,12 @@ public class CityActivityLimiter {
 
     private void addCityActivity(Activity activity) {
         if (containsCityActivity(activity.getCityId(), activity.getActivityId())) {return;}
-        System.out.println(JSON.toJSONString(activity));
+        StringBuilder sb = new StringBuilder("limiter2.addCityActivity(new Activity(")
+            .append(activity.getCityId()).append(", ")
+            .append(activity.getActivityId()).append("L, ")
+            .append(activity.getBeginAt()).append("L, ")
+            .append(activity.getEndAt()).append("L));");
+        System.out.println(sb.toString());
         if (!cityActivityCountMap.containsKey(activity.getCityId())) {
             cityActivityCountMap.put(activity.getCityId(), newActivityCountMap(activity));
             return;
@@ -154,13 +159,13 @@ public class CityActivityLimiter {
 
     public static void main(String[] args) {
         CityActivityLimiter limiter2 = new CityActivityLimiter(4);
-//        test(limiter2);
+        test(limiter2);
 
 //        limiter2.addCityActivity(new Activity(4, 7L, 2L, 30L));
-        limiter2.addCityActivity(new Activity(2, 14L, 17L, 36L));
-        limiter2.addCityActivity(new Activity(2, 2L, 18L, 36L));
-        limiter2.addCityActivity(new Activity(2, 7L, 6L, 28L));
-        System.out.println();
+//        limiter2.addCityActivity(new Activity(2, 14L, 17L, 36L));
+//        limiter2.addCityActivity(new Activity(2, 2L, 18L, 36L));
+//        limiter2.addCityActivity(new Activity(2, 7L, 6L, 28L));
+//        System.out.println();
     }
 
 }
