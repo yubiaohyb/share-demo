@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 public class CityActivityLimiter {
     private int limitCount;
 
-    private Map<Integer, Map<Integer, List<ActivityPeriod>>> cityActivityCountMap = new HashMap<>();
+    private Map<Integer, Map<Integer, List<ActivitiesPeriod>>> cityActivityCountMap = new HashMap<>();
 
     private Map<Long, Integer> activityCityMap = new HashMap<>();
 
@@ -31,8 +31,8 @@ public class CityActivityLimiter {
         return activityCityMap.containsKey(cityId) && activityId.equals(activityCityMap.get(cityId));
     }
 
-    private List<ActivityPeriod> getActivityPeriods(List<Activity> activities) {
-        return activities.stream().map(activity -> {ActivityPeriod activityPeriod = new ActivityPeriod();
+    private List<ActivitiesPeriod> getActivityPeriods(List<Activity> activities) {
+        return activities.stream().map(activity -> {ActivitiesPeriod activityPeriod = new ActivitiesPeriod();
             activityPeriod.getActivityIds().add(activity.getActivityId());
             activityPeriod.setBeginAt(activity.getBeginAt());
             activityPeriod.setEndAt(activity.getEndAt());
@@ -40,13 +40,13 @@ public class CityActivityLimiter {
         }).collect(Collectors.toList());
     }
 
-    private Map<Integer, List<ActivityPeriod>> newActivityCountMap(Activity activity) {
-        Map<Integer, List<ActivityPeriod>> activityCountMap = new HashMap<>();
+    private Map<Integer, List<ActivitiesPeriod>> newActivityCountMap(Activity activity) {
+        Map<Integer, List<ActivitiesPeriod>> activityCountMap = new HashMap<>();
         activityCountMap.put(1, getActivityPeriods(Arrays.asList(activity)));
         return activityCountMap;
     }
 
-    private List<ActivityPeriod> cloneActivityPeriods(List<ActivityPeriod> activityPeriods) {
+    private List<ActivitiesPeriod> cloneActivityPeriods(List<ActivitiesPeriod> activityPeriods) {
         return activityPeriods.stream().map(srcActivityPeriod -> srcActivityPeriod.clone()).collect(Collectors.toList());
     }
 
@@ -57,21 +57,21 @@ public class CityActivityLimiter {
             cityActivityCountMap.put(activity.getCityId(), newActivityCountMap(activity));
             return;
         }
-        Map<Integer, List<ActivityPeriod>> activityCountMap = cityActivityCountMap.get(activity.getCityId());
+        Map<Integer, List<ActivitiesPeriod>> activityCountMap = cityActivityCountMap.get(activity.getCityId());
         List<Activity> remainedActivities = Arrays.asList(activity);
         for (int i = limitCount-1; i > 0; i--) {
             if (!activityCountMap.containsKey(i)) {
                continue;
             }
-            List<ActivityPeriod> specifiedCountActivities = activityCountMap.get(i);
+            List<ActivitiesPeriod> currentCountActivitiesPeriods = activityCountMap.get(i);
             //下面这行代码可以辅助排错
-            Map<Long, ActivityPeriod> collect = specifiedCountActivities.stream().collect(Collectors.toMap(ActivityPeriod::getBeginAt, activityPeriod -> activityPeriod));
-            List<ActivityPeriod> clonedCountActivities = cloneActivityPeriods(specifiedCountActivities);
-            for (int j=0; j < clonedCountActivities.size(); j++) {
-                ActivityPeriod copiedActivityPeriod = clonedCountActivities.get(j);
-                boolean last = j == clonedCountActivities.size() - 1;
-                ActivityHandleResult handleResult = strateger.handleActivities(copiedActivityPeriod, remainedActivities);
-                PostProcessContext context = new PostProcessContext(copiedActivityPeriod, activity, activityCountMap, i, last);
+            Map<Long, ActivitiesPeriod> collect = currentCountActivitiesPeriods.stream().collect(Collectors.toMap(ActivitiesPeriod::getBeginAt, activityPeriod -> activityPeriod));
+            List<ActivitiesPeriod> clonedActivitiesPeriods = cloneActivityPeriods(currentCountActivitiesPeriods);
+            for (int j=0; j < clonedActivitiesPeriods.size(); j++) {
+                ActivitiesPeriod clonedActivitiesPeriod = clonedActivitiesPeriods.get(j);
+                boolean last = j == clonedActivitiesPeriods.size() - 1;
+                ActivityHandleResult handleResult = strateger.handleActivities(clonedActivitiesPeriod, remainedActivities);
+                PostProcessContext context = new PostProcessContext(clonedActivitiesPeriod, activity, activityCountMap, i, last);
                 PostHandleResult postHandleResult = postProcessHandleResult(handleResult, context);
                 if (postHandleResult.isContinued()) {
                     remainedActivities = postHandleResult.getRemainedActivities();
@@ -113,14 +113,11 @@ public class CityActivityLimiter {
 
     private void postProcessHandleResultRisedActivities(ActivityHandleResult handleResult, PostProcessContext context) {
         Activity activity = context.getActivity();
-        Map<Integer, List<ActivityPeriod>> activityCountMap = context.getActivityCountMap();
+        Map<Integer, List<ActivitiesPeriod>> activityCountMap = context.getActivityCountMap();
         int i = context.getCount();
         //上浮
         if (i + 1 >= limitCount) {
-            System.out.println(JSON.toJSONString(cityActivityCountMap));
-            System.out.println(activity.getCityId() + ":" + i + ":" + JSON.toJSONString(handleResult.getRisedPeriods()));
             throw new RuntimeException("超出活动数限制");
-
         }
         if (activityCountMap.containsKey(i + 1)) {
             activityCountMap.get(i + 1).addAll(handleResult.getRisedPeriods());
@@ -129,11 +126,11 @@ public class CityActivityLimiter {
         }
 
         //替换
-        List<ActivityPeriod> activityPeriods = activityCountMap.get(i);
-        ActivityPeriod clonedPeriod = context.getActivityPeriod().clone();
-        activityPeriods.remove(clonedPeriod);
+        List<ActivitiesPeriod> currentCountActivitiesPeriods = activityCountMap.get(i);
+        ActivitiesPeriod clonedPeriod = context.getActivityPeriod().clone();
+        currentCountActivitiesPeriods.remove(clonedPeriod);
         if (!handleResult.getRemainedPeriods().isEmpty()) {
-            activityPeriods.addAll(handleResult.getRemainedPeriods());
+            currentCountActivitiesPeriods.addAll(handleResult.getRemainedPeriods());
         }
     }
 

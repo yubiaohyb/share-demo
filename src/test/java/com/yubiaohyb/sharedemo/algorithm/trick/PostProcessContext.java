@@ -16,13 +16,13 @@ import java.util.Map;
  */
 @Data
 public class PostProcessContext {
-    private Map<Integer, List<ActivityPeriod>> activityCountMap;
+    private Map<Integer, List<ActivitiesPeriod>> activityCountMap;
     private int count;
     private boolean last;
-    private ActivityPeriod activityPeriod;
+    private ActivitiesPeriod activityPeriod;
     private Activity activity;
 
-    public PostProcessContext(ActivityPeriod activityPeriod, Activity activity, Map<Integer, List<ActivityPeriod>> activityCountMap, int count, boolean last) {
+    public PostProcessContext(ActivitiesPeriod activityPeriod, Activity activity, Map<Integer, List<ActivitiesPeriod>> activityCountMap, int count, boolean last) {
         this.activityPeriod = activityPeriod;
         this.activity = activity;
         this.activityCountMap = activityCountMap;
