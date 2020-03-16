@@ -91,7 +91,7 @@ public class ActivityCountStrateger {
         return activityPeriod;
     }
 
-    private void changeRemained(ActivitiesPeriod removedPeriod, List<ActivitiesPeriod> subPeriods, List<Activity> subActivities, Activity removedActivity) {
+    private void changeRemained(ActivitiesPeriod removedPeriod, List<ActivitiesPeriod> subPeriods, Activity removedActivity, List<Activity> subActivities) {
         this.remainedPeriods.remove(removedPeriod);
         if (null != subPeriods) {
             this.remainedPeriods.addAll(subPeriods);
@@ -109,21 +109,21 @@ public class ActivityCountStrateger {
         ActivitiesPeriod subPeriodLeft = newActivityPeriod(activityPeriod.getActivityIds(), null, activityPeriod.getBeginAt(), activity.getBeginAt());
         ActivitiesPeriod risedPeriod = newActivityPeriod(activityPeriod.getActivityIds(), activity.getActivityId(), activity.getBeginAt(), activity.getEndAt());
         ActivitiesPeriod subPeriodRight = newActivityPeriod(activityPeriod.getActivityIds(), null, activity.getEndAt(), activityPeriod.getEndAt());
-        changeRemained(activityPeriod, Arrays.asList(subPeriodLeft, subPeriodRight), null, activity);
+        changeRemained(activityPeriod, Arrays.asList(subPeriodLeft, subPeriodRight), activity, null);
         return new ActivityHandleResult(Arrays.asList(risedPeriod));
     }
 
     private ActivityHandleResult handleIncludeActivityLeft(ActivitiesPeriod activityPeriod, Activity activity) {
         ActivitiesPeriod risedPeriod = newActivityPeriod(activityPeriod.getActivityIds(), activity.getActivityId(), activity.getBeginAt(), activity.getEndAt());
         ActivitiesPeriod subPeriodRight = newActivityPeriod(activityPeriod.getActivityIds(), null, activity.getEndAt(), activityPeriod.getEndAt());
-        changeRemained(activityPeriod, Arrays.asList(subPeriodRight), null, activity);
+        changeRemained(activityPeriod, Arrays.asList(subPeriodRight), activity, null);
         return new ActivityHandleResult(Arrays.asList(risedPeriod));
     }
 
     private ActivityHandleResult handleIncludeActivityRight(ActivitiesPeriod activityPeriod, Activity activity) {
         ActivitiesPeriod subPeriodLeft = newActivityPeriod(activityPeriod.getActivityIds(), null, activityPeriod.getBeginAt(), activity.getBeginAt());
         ActivitiesPeriod risedPeriod = newActivityPeriod(activityPeriod.getActivityIds(), activity.getActivityId(), activity.getBeginAt(), activity.getEndAt());
-        changeRemained(activityPeriod, Arrays.asList(subPeriodLeft), null, activity);
+        changeRemained(activityPeriod, Arrays.asList(subPeriodLeft), activity, null);
         return new ActivityHandleResult(Arrays.asList(risedPeriod));
     }
 
@@ -131,21 +131,21 @@ public class ActivityCountStrateger {
         Activity subActivityLeft = new Activity(activity.getCityId(), activity.getActivityId(), activity.getBeginAt(), activityPeriod.getBeginAt());
         ActivitiesPeriod risedPeriod = newActivityPeriod(activityPeriod.getActivityIds(), activity.getActivityId(), activityPeriod.getBeginAt(), activityPeriod.getEndAt());
         Activity subActivityRight = new Activity(activity.getCityId(), activity.getActivityId(), activityPeriod.getEndAt(), activity.getEndAt());
-        changeRemained(activityPeriod, null, Arrays.asList(subActivityLeft, subActivityRight), activity);
+        changeRemained(activityPeriod, null, activity, Arrays.asList(subActivityLeft, subActivityRight));
         return new ActivityHandleResult(Arrays.asList(risedPeriod));
     }
 
     private ActivityHandleResult handleIncludeActivityPassiveLeft(ActivitiesPeriod activityPeriod, Activity activity) {
         ActivitiesPeriod risedPeriod = newActivityPeriod(activityPeriod.getActivityIds(), activity.getActivityId(), activityPeriod.getBeginAt(), activityPeriod.getEndAt());
         Activity subActivityRight = new Activity(activity.getCityId(), activity.getActivityId(), activityPeriod.getEndAt(), activity.getEndAt());
-        changeRemained(activityPeriod, null, Arrays.asList(subActivityRight), activity);
+        changeRemained(activityPeriod, null, activity, Arrays.asList(subActivityRight));
         return new ActivityHandleResult(Arrays.asList(risedPeriod));
     }
 
     private ActivityHandleResult handleIncludeActivityPassiveRight(ActivitiesPeriod activityPeriod, Activity activity) {
         Activity subActivityLeft = new Activity(activity.getCityId(), activity.getActivityId(), activity.getBeginAt(), activityPeriod.getBeginAt());
         ActivitiesPeriod risedPeriod = newActivityPeriod(activityPeriod.getActivityIds(), activity.getActivityId(), activityPeriod.getBeginAt(), activityPeriod.getEndAt());
-        changeRemained(activityPeriod, null, Arrays.asList(subActivityLeft), activity);
+        changeRemained(activityPeriod, null, activity, Arrays.asList(subActivityLeft));
         return new ActivityHandleResult(Arrays.asList(risedPeriod));
     }
 
@@ -153,7 +153,7 @@ public class ActivityCountStrateger {
         Activity subActivityLeft = new Activity(activity.getCityId(), activity.getActivityId(), activity.getBeginAt(), activityPeriod.getBeginAt());
         ActivitiesPeriod risedPeriod = newActivityPeriod(activityPeriod.getActivityIds(), activity.getActivityId(), activityPeriod.getBeginAt(), activity.getEndAt());
         ActivitiesPeriod subPeriodRight = newActivityPeriod(activityPeriod.getActivityIds(), null, activity.getEndAt(), activityPeriod.getEndAt());
-        changeRemained(activityPeriod, Arrays.asList(subPeriodRight), Arrays.asList(subActivityLeft), activity);
+        changeRemained(activityPeriod, Arrays.asList(subPeriodRight), activity, Arrays.asList(subActivityLeft));
         return new ActivityHandleResult(Arrays.asList(risedPeriod));
     }
 
@@ -161,13 +161,13 @@ public class ActivityCountStrateger {
         ActivitiesPeriod subPeriodLeft = newActivityPeriod(activityPeriod.getActivityIds(), null, activityPeriod.getBeginAt(), activity.getBeginAt());
         ActivitiesPeriod risedPeriod = newActivityPeriod(activityPeriod.getActivityIds(), activity.getActivityId(), activity.getBeginAt(), activityPeriod.getEndAt());
         Activity subActivityRight = new Activity(activity.getCityId(), activity.getActivityId(), activityPeriod.getEndAt(), activity.getEndAt());
-        changeRemained(activityPeriod, Arrays.asList(subPeriodLeft), Arrays.asList(subActivityRight), activity);
+        changeRemained(activityPeriod, Arrays.asList(subPeriodLeft), activity, Arrays.asList(subActivityRight));
         return new ActivityHandleResult(Arrays.asList(risedPeriod));
     }
 
     private ActivityHandleResult handleIncludeActivityMutual(ActivitiesPeriod activityPeriod, Activity activity) {
         ActivitiesPeriod risedPeriod = newActivityPeriod(activityPeriod.getActivityIds(), activity.getActivityId(), activity.getBeginAt(), activity.getEndAt());
-        changeRemained(activityPeriod, null, null, activity);
+        changeRemained(activityPeriod, null, activity, null);
         return new ActivityHandleResult(Arrays.asList(risedPeriod));
     }
 
