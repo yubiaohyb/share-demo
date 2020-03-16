@@ -27,25 +27,6 @@ public class CityActivityLimiter {
 
     public CityActivityLimiter(int limitCount) {this.limitCount = limitCount;}
 
-    public static void  test(CityActivityLimiter limiter2) {
-        for (;;) {
-            Long activityId = RandomUtils.nextLong(1L, 20L);
-            Integer cityId = RandomUtils.nextInt(1, 5);
-            Long beginAt = RandomUtils.nextLong(1L, 20L);
-            Long endAt = RandomUtils.nextLong(beginAt + 1, 40L);
-            limiter2.addCityActivity(new Activity(cityId, activityId, beginAt, endAt));
-        }
-    }
-
-    public static void main(String[] args) {
-        CityActivityLimiter limiter2 = new CityActivityLimiter(4);
-        test(limiter2);
-
-//        limiter2.addCityActivity(new Activity(1, 6L, 7L, 34L));
-//        limiter2.addCityActivity(new Activity(1, 18L, 15L, 25L));
-        System.out.println();
-    }
-
     private boolean containsCityActivity(Integer cityId, Long activityId) {
         return activityCityMap.containsKey(cityId) && activityId.equals(activityCityMap.get(cityId));
     }
@@ -77,11 +58,11 @@ public class CityActivityLimiter {
             return;
         }
         Map<Integer, List<ActivityPeriod>> activityCountMap = cityActivityCountMap.get(activity.getCityId());
+        List<Activity> remainedActivities = Arrays.asList(activity);
         for (int i = limitCount-1; i > 0; i--) {
             if (!activityCountMap.containsKey(i)) {
                continue;
             }
-            List<Activity> remainedActivities = Arrays.asList(activity);
             List<ActivityPeriod> specifiedCountActivities = activityCountMap.get(i);
             Map<Long, ActivityPeriod> collect = specifiedCountActivities.stream().collect(Collectors.toMap(ActivityPeriod::getBeginAt, activityPeriod -> activityPeriod));
             List<ActivityPeriod> copiedCountActivities = cloneActivityPeriods(specifiedCountActivities);
@@ -139,24 +120,48 @@ public class CityActivityLimiter {
         }
         if (activityCountMap.containsKey(i + 1)) {
             activityCountMap.get(i + 1).addAll(handleResult.getRisedPeriods());
+        } else {
+            activityCountMap.put(i + 1, handleResult.getRisedPeriods());
         }
-        activityCountMap.put(i + 1, handleResult.getRisedPeriods());
 
         //替换
         List<ActivityPeriod> activityPeriods = activityCountMap.get(i);
         List<ActivityPeriod> clonedActivityPeriods = cloneActivityPeriods(activityPeriods);
-        activityPeriods.remove(clonedActivityPeriods);
+        activityPeriods.removeAll(clonedActivityPeriods);
         if (!handleResult.getRemainedPeriods().isEmpty()) {
             activityPeriods.addAll(handleResult.getRemainedPeriods());
         }
     }
+
+    /**
+     * 待解决的bug
+     * {"activityId":7,"beginAt":2,"cityId":4,"endAt":30}
+     * {"activityId":14,"beginAt":17,"cityId":2,"endAt":36}
+     * {"activityId":2,"beginAt":18,"cityId":2,"endAt":36}
+     * {"activityId":7,"beginAt":6,"cityId":2,"endAt":28}
+     * Exception in thread "main" java.lang.IllegalStateException: Duplicate key ActivityPeriod(activityIds=[14], beginAt=17, endAt=36)
+     */
+
+    public static void  test(CityActivityLimiter limiter2) {
+        for (;;) {
+            Long activityId = RandomUtils.nextLong(1L, 20L);
+            Integer cityId = RandomUtils.nextInt(1, 5);
+            Long beginAt = RandomUtils.nextLong(1L, 20L);
+            Long endAt = RandomUtils.nextLong(beginAt + 1, 40L);
+            limiter2.addCityActivity(new Activity(cityId, activityId, beginAt, endAt));
+        }
+    }
+
+    public static void main(String[] args) {
+        CityActivityLimiter limiter2 = new CityActivityLimiter(4);
+//        test(limiter2);
+
+//        limiter2.addCityActivity(new Activity(4, 7L, 2L, 30L));
+        limiter2.addCityActivity(new Activity(2, 14L, 17L, 36L));
+        limiter2.addCityActivity(new Activity(2, 2L, 18L, 36L));
+        limiter2.addCityActivity(new Activity(2, 7L, 6L, 28L));
+        System.out.println();
+    }
+
 }
 
-/**
- * 待解决的bug
- * {"activityId":7,"beginAt":2,"cityId":4,"endAt":30}
- * {"activityId":14,"beginAt":17,"cityId":2,"endAt":36}
- * {"activityId":2,"beginAt":18,"cityId":2,"endAt":36}
- * {"activityId":7,"beginAt":6,"cityId":2,"endAt":28}
- * Exception in thread "main" java.lang.IllegalStateException: Duplicate key ActivityPeriod(activityIds=[14], beginAt=17, endAt=36)
- */
