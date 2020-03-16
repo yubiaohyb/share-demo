@@ -163,7 +163,6 @@ public class CityActivityLimiter {
     public static void main(String[] args) {
         CityActivityLimiter limiter2 = new CityActivityLimiter(4);
         test(limiter2);
-
         System.out.println();
     }
 

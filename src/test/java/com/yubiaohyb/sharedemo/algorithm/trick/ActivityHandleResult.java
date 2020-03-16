@@ -26,11 +26,11 @@ public class ActivityHandleResult {
     }
 
     public ActivityHandleResult(List<ActivityPeriod> risedPeriods, List<Activity> remainedActivities) {
-        new ActivityHandleResult(risedPeriods, remainedActivities, null);
+        this(risedPeriods, remainedActivities, null);
     }
 
     public ActivityHandleResult(List<ActivityPeriod> risedPeriods) {
-        new ActivityHandleResult(risedPeriods,null);
+        this(risedPeriods, null);
     }
 
 

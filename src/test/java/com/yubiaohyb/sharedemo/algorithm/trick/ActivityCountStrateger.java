@@ -111,21 +111,21 @@ public class ActivityCountStrateger {
         ActivityPeriod activityPeriodMiddle = newActivityPeriod(activityPeriod.getActivityIds(), activity.getActivityId(), activity.getBeginAt(), activity.getEndAt());
         ActivityPeriod activityPeriodRight = newActivityPeriod(activityPeriod.getActivityIds(), null, activity.getEndAt(), activityPeriod.getEndAt());
         replaceRemained(activityPeriod, Arrays.asList(activityPeriodLeft, activityPeriodRight), null, activity);
-        return new ActivityHandleResult(Arrays.asList(activityPeriodMiddle), null, null);
+        return new ActivityHandleResult(Arrays.asList(activityPeriodMiddle));
     }
 
     private ActivityHandleResult handleIncludeActivityLeft(ActivityPeriod activityPeriod, Activity activity) {
         ActivityPeriod activityPeriodMiddle = newActivityPeriod(activityPeriod.getActivityIds(), activity.getActivityId(), activity.getBeginAt(), activity.getEndAt());
         ActivityPeriod activityPeriodRight = newActivityPeriod(activityPeriod.getActivityIds(), null, activity.getEndAt(), activityPeriod.getEndAt());
         replaceRemained(activityPeriod, Arrays.asList(activityPeriodRight), null, activity);
-        return new ActivityHandleResult(Arrays.asList(activityPeriodMiddle), null, null);
+        return new ActivityHandleResult(Arrays.asList(activityPeriodMiddle));
     }
 
     private ActivityHandleResult handleIncludeActivityRight(ActivityPeriod activityPeriod, Activity activity) {
         ActivityPeriod activityPeriodLeft = newActivityPeriod(activityPeriod.getActivityIds(), null, activityPeriod.getBeginAt(), activity.getBeginAt());
         ActivityPeriod activityPeriodMiddle = newActivityPeriod(activityPeriod.getActivityIds(), activity.getActivityId(), activity.getBeginAt(), activity.getEndAt());
         replaceRemained(activityPeriod, Arrays.asList(activityPeriodLeft), null, activity);
-        return new ActivityHandleResult(Arrays.asList(activityPeriodMiddle), null, null);
+        return new ActivityHandleResult(Arrays.asList(activityPeriodMiddle));
     }
 
     private ActivityHandleResult handleIncludeActivityPassiveAll(ActivityPeriod activityPeriod, Activity activity) {
@@ -133,21 +133,21 @@ public class ActivityCountStrateger {
         ActivityPeriod activityPeriodMiddle = newActivityPeriod(activityPeriod.getActivityIds(), activity.getActivityId(), activityPeriod.getBeginAt(), activityPeriod.getEndAt());
         Activity activityRight = new Activity(activity.getCityId(), activity.getActivityId(), activityPeriod.getBeginAt(), activity.getBeginAt());
         replaceRemained(activityPeriod, null, Arrays.asList(activityLeft, activityRight), activity);
-        return new ActivityHandleResult(Arrays.asList(activityPeriodMiddle), null, null);
+        return new ActivityHandleResult(Arrays.asList(activityPeriodMiddle));
     }
 
     private ActivityHandleResult handleIncludeActivityPassiveLeft(ActivityPeriod activityPeriod, Activity activity) {
         ActivityPeriod activityPeriodMiddle = newActivityPeriod(activityPeriod.getActivityIds(), activity.getActivityId(), activityPeriod.getBeginAt(), activityPeriod.getEndAt());
         Activity activityRight = new Activity(activity.getCityId(), activity.getActivityId(), activityPeriod.getEndAt(), activity.getEndAt());
         replaceRemained(activityPeriod, null, Arrays.asList(activityRight), activity);
-        return new ActivityHandleResult(Arrays.asList(activityPeriodMiddle), null, null);
+        return new ActivityHandleResult(Arrays.asList(activityPeriodMiddle));
     }
 
     private ActivityHandleResult handleIncludeActivityPassiveRight(ActivityPeriod activityPeriod, Activity activity) {
         Activity activityLeft = new Activity(activity.getCityId(), activity.getActivityId(), activity.getBeginAt(), activityPeriod.getBeginAt());
         ActivityPeriod activityPeriodMiddle = newActivityPeriod(activityPeriod.getActivityIds(), activity.getActivityId(), activityPeriod.getBeginAt(), activityPeriod.getEndAt());
         replaceRemained(activityPeriod, null, Arrays.asList(activityLeft), activity);
-        return new ActivityHandleResult(Arrays.asList(activityPeriodMiddle), null, null);
+        return new ActivityHandleResult(Arrays.asList(activityPeriodMiddle));
     }
 
     private ActivityHandleResult handleIncludeActivityCrossLeft(ActivityPeriod activityPeriod, Activity activity) {
@@ -155,7 +155,7 @@ public class ActivityCountStrateger {
         ActivityPeriod activityPeriodMiddle = newActivityPeriod(activityPeriod.getActivityIds(), activity.getActivityId(), activityPeriod.getBeginAt(), activity.getEndAt());
         ActivityPeriod activityPeriodRight = newActivityPeriod(activityPeriod.getActivityIds(), null, activity.getEndAt(), activityPeriod.getEndAt());
         replaceRemained(activityPeriod, Arrays.asList(activityPeriodRight), Arrays.asList(activityLeft), activity);
-        return new ActivityHandleResult(Arrays.asList(activityPeriodMiddle), null, null);
+        return new ActivityHandleResult(Arrays.asList(activityPeriodMiddle));
     }
 
     private ActivityHandleResult handleIncludeActivityCrossRight(ActivityPeriod activityPeriod, Activity activity) {
@@ -163,13 +163,13 @@ public class ActivityCountStrateger {
         ActivityPeriod activityPeriodMiddle = newActivityPeriod(activityPeriod.getActivityIds(), activity.getActivityId(), activity.getBeginAt(), activityPeriod.getEndAt());
         Activity activityRight = new Activity(activity.getCityId(), activity.getActivityId(), activityPeriod.getEndAt(), activity.getEndAt());
         replaceRemained(activityPeriod, Arrays.asList(activityPeriodLeft), Arrays.asList(activityRight), activity);
-        return new ActivityHandleResult(Arrays.asList(activityPeriodMiddle), null, null);
+        return new ActivityHandleResult(Arrays.asList(activityPeriodMiddle));
     }
 
     private ActivityHandleResult handleIncludeActivityMutual(ActivityPeriod activityPeriod, Activity activity) {
         ActivityPeriod activityPeriodMiddle = newActivityPeriod(activityPeriod.getActivityIds(), activity.getActivityId(), activity.getBeginAt(), activity.getEndAt());
         replaceRemained(activityPeriod, null, null, activity);
-        return new ActivityHandleResult(Arrays.asList(activityPeriodMiddle), null, null);
+        return new ActivityHandleResult(Arrays.asList(activityPeriodMiddle));
     }
 
     private ActivityHandleResult dohandleActivity(ActivityPeriod activityPeriod, Activity activity) {
