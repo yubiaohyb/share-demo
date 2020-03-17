@@ -45,7 +45,7 @@ RC/RR<br>
 * 策略失效<br>
 并非所有的情况都能套用MVCC读的判断策略，特别是在一个事务进行期间，另一个事务提交了修改的情况。<br>
 不论是RC，还是RR，版本记录是否可见的本质，就在于ReadView生成时，事务是否已提交。<br>
-RC下：<br>![](./mysql-mvcc-invalid-rc.jpg)
-RR下：<br>![](./mysql-mvcc-invalid-rr.jpg)
+RC下：<br>![](./mysql-mvcc-invalid-rc.jpg)<br>
+RR下：<br>![](./mysql-mvcc-invalid-rr.jpg)<br>
   
 
