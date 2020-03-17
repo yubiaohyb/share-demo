@@ -51,3 +51,4 @@ RC下：<br>![](./mysql-mvcc-invalid-rc.jpg)<br>
 RR下：<br>![](./mysql-mvcc-invalid-rr.jpg)<br>
   
 
+整理自知乎文章[MySQL InnoDB MVCC 机制的原理及实现](https://zhuanlan.zhihu.com/p/64576887)
