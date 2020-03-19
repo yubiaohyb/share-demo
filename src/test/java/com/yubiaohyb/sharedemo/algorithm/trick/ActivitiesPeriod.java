@@ -15,14 +15,14 @@ import java.util.List;
  * @since 2020-03-15 01:03
  */
 @Data
-public class ActivityPeriod implements Cloneable{
+public class ActivitiesPeriod implements Cloneable{
     private List<Long> activityIds = new ArrayList<>();
     private long beginAt;
     private long endAt;
 
-    public ActivityPeriod clone() {
+    public ActivitiesPeriod clone() {
         try {
-            return (ActivityPeriod)super.clone();
+            return (ActivitiesPeriod)super.clone();
         } catch (CloneNotSupportedException e) {
             e.printStackTrace();
         }

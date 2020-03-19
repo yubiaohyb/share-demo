@@ -15,22 +15,22 @@ import java.util.List;
  */
 @Data
 public class ActivityHandleResult {
-    private List<ActivityPeriod> risedPeriods;
-    private List<ActivityPeriod> remainedPeriods;
+    private List<ActivitiesPeriod> risedPeriods;
+    private List<ActivitiesPeriod> remainedPeriods;
     private List<Activity> remainedActivities;
 
-    public ActivityHandleResult(List<ActivityPeriod> risedPeriods, List<Activity> remainedActivities, List<ActivityPeriod> remainedPeriods) {
+    public ActivityHandleResult(List<ActivitiesPeriod> risedPeriods, List<Activity> remainedActivities, List<ActivitiesPeriod> remainedPeriods) {
         this.risedPeriods = risedPeriods;
         this.remainedActivities = remainedActivities;
         this.remainedPeriods = remainedPeriods;
     }
 
-    public ActivityHandleResult(List<ActivityPeriod> risedPeriods, List<Activity> remainedActivities) {
-        new ActivityHandleResult(risedPeriods, remainedActivities, null);
+    public ActivityHandleResult(List<ActivitiesPeriod> risedPeriods, List<Activity> remainedActivities) {
+        this(risedPeriods, remainedActivities, null);
     }
 
-    public ActivityHandleResult(List<ActivityPeriod> risedPeriods) {
-        new ActivityHandleResult(risedPeriods,null);
+    public ActivityHandleResult(List<ActivitiesPeriod> risedPeriods) {
+        this(risedPeriods, null);
     }
 
 

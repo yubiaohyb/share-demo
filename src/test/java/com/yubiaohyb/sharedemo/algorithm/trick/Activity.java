@@ -3,7 +3,7 @@ package com.yubiaohyb.sharedemo.algorithm.trick;
 import lombok.Data;
 
 @Data
-public class Activity {
+public class Activity implements Cloneable {
     private final Integer cityId;
     private final Long activityId;
     private final Long beginAt;
@@ -14,6 +14,15 @@ public class Activity {
         this.activityId = activityId;
         this.beginAt = beginAt;
         this.endAt = endAt;
+    }
+
+    public Activity clone() {
+        try {
+            return (Activity) super.clone();
+        } catch (CloneNotSupportedException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
 }
