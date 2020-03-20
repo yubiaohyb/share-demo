@@ -37,7 +37,20 @@
 整理自[SQL语句执行深入讲解](http://www.uxys.com/html/MySQL/20200203/69945.html)
 
 ### 引擎
+#### 常见
 ![](./mysql-common-engines.png)
 
+##### InnoDB和MyISAM的区别
+![](./mysql-diff-between-innodb-and-myisam.png)
+
+#### 选型推荐
+* InnoDB
+  * 事务完整性
+  * 并发控制
+  * 频繁读写
+* MyISAM
+  * 强调高效插入、读取记录，事务完整性、并发度不高
+* MEMORY
+  * 读写速度快，事务完整性、并发度不高，易丢失数据，表不能太大
 ### 存储
 
