@@ -1,16 +1,16 @@
-## 架构篇
-### 逻辑架构
+# 架构篇
+## 逻辑架构
  ![](./mysql-architecture.jpeg)
 * 连接层
 * 服务层
 * 引擎层
 * 存储层
 
-### 脚本流程
-#### 简化版
+## 脚本流程
+### 简化版
 ![](./mysql-script-execution-sketch-progress.jpg)
 
-#### 复杂版
+### 复杂版
 ![](./mysql-script-execution-complex-progress.png)
 上图中，整个架构分为两层，上层是MySQLD的，被称为的‘SQL Layer'，下层是各种各样，对上提供接口的存储引擎，被称为‘Storage Engine Layer'。<br>
 执行流程<br>
@@ -36,14 +36,14 @@
 
 整理自[SQL语句执行深入讲解](http://www.uxys.com/html/MySQL/20200203/69945.html)
 
-### 引擎
-#### 常见
+## 引擎
+### 常见
 ![](./mysql-common-engines.png)
 
-##### InnoDB和MyISAM的区别
+#### InnoDB和MyISAM的区别
 ![](./mysql-diff-between-innodb-and-myisam.png)
 
-#### 选型推荐
+### 选型推荐
 * InnoDB
   * 事务完整性
   * 并发控制
@@ -55,12 +55,12 @@
   
 不同引擎的表在设计的尽量不要有关联，表关联查询的时候可能会因为不同的引擎出现错误，其次，一旦设计好之后后期不要轻易去改变表引擎。  
   
-### 物理存储
+## 物理存储
 mysql通过文件系统对数据和索引进行存储
 * 日志        顺序IO
 * 数据索引      随机IO
 
-#### 日志文件
+### 日志文件
 > 查看日志开启情况<br>
   show variables like 'log_%';
 * error log<br>
@@ -86,7 +86,7 @@ mysql通过文件系统对数据和索引进行存储
 * relay log
     主从复制使用
     
-#### 数据文件
+### 数据文件
 > 查看数据文件
   show variables like 'datadir%';
   
