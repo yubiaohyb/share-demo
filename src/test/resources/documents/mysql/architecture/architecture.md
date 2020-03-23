@@ -44,7 +44,7 @@
 ![](./mysql-common-engines.png)
 
 #### InnoDB和MyISAM的区别
-![](./mysql-diff-between-innodb-and-myisam.png)
+![](./mysq-diff-between-innodb-and-myisam.png)
 
 ### 选型推荐
 * InnoDB
