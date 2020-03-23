@@ -37,6 +37,9 @@
 整理自[SQL语句执行深入讲解](http://www.uxys.com/html/MySQL/20200203/69945.html)
 
 ## 引擎
+存储引擎以表为单位进行数据维护，建表可以指定类型，默认InnoDB。
+> creat table xxx() engine=InnoDB/Memory/MyISAM 
+
 ### 常见
 ![](./mysql-common-engines.png)
 
