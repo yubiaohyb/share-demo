@@ -1,4 +1,4 @@
-package com.yubiaohyb.sharedemo.algorithm.trick;
+package com.yubiaohyb.sharedemo.algorithm.trick.cityactivitylimiter;
 
 import lombok.Data;
 

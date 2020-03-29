@@ -11,7 +11,7 @@ share-demo
 
 ## 算法
 * [常规排序](./src/main/java/com/yubiaohyb/sharedemo/algorithm/sort/package-info.java)
-
+* [城市活动限制器](./src/test/java/com/yubiaohyb/sharedemo/algorithm/trick/cityactivitylimiter/CityActivityLimiter.java)
 
 ## 源码阅读
 * [mybatis]()
