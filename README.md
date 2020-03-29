@@ -37,6 +37,9 @@ share-demo
 ## 心理学
 * [心理学与生活](./src/test/resources/documents/psychology/心理学与生活.md)
 
+## mac使用
+* [mac](./src/test/resources/documents/mac/mac.md)
+
 ## 个人随笔
 
 ## *联系方式*
