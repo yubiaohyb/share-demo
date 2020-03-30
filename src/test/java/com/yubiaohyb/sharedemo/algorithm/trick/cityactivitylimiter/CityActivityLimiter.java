@@ -1,6 +1,5 @@
-package com.yubiaohyb.sharedemo.algorithm.trick;
+package com.yubiaohyb.sharedemo.algorithm.trick.cityactivitylimiter;
 
-import com.alibaba.fastjson.JSON;
 import org.apache.commons.lang3.RandomUtils;
 
 import java.util.*;

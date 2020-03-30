@@ -1,4 +1,4 @@
-package com.yubiaohyb.sharedemo.algorithm.trick;
+package com.yubiaohyb.sharedemo.algorithm.trick.cityactivitylimiter;
 
 /**
  * 人若志趣不远，心不在焉，虽学不成。
