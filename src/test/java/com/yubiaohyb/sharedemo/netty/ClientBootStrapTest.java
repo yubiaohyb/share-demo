@@ -31,13 +31,14 @@ public class ClientBootStrapTest {
             Bootstrap bootstrap = new Bootstrap();
             bootstrap.group(group)
                 .channel(NioSocketChannel.class)
-                .handler(new ClientChannelHandler());
+                .handler(new ClientChatRoomChannelInitializer());
             ChannelFuture channelFuture = bootstrap.connect("localhost", 8888).sync();
+            log.info("连接到服务器");
             InputStreamReader inputStreamReader = new InputStreamReader(System.in, Charset.forName("UTF-8"));
             BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
             channelFuture.channel().writeAndFlush(bufferedReader.readLine() + "\r\n");
 
-            channelFuture.channel().closeFuture().sync();
+//            channelFuture.channel().closeFuture().sync();
         } finally {
 //            group.shutdownGracefully();
         }
