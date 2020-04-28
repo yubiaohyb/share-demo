@@ -29,5 +29,4 @@ public class ClientBootStrapTest {
     public static void main(String[] args) throws Exception {
         test();
     }
-
 }
