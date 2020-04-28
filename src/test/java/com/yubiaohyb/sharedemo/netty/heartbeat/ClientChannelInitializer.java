@@ -1,6 +1,6 @@
-package com.yubiaohyb.sharedemo.netty;
+package com.yubiaohyb.sharedemo.netty.heartbeat;
 
-import io.netty.channel.Channel;
+import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;
 import io.netty.channel.socket.SocketChannel;
@@ -15,14 +15,19 @@ import io.netty.handler.codec.string.StringEncoder;
  * @version $$Id$$
  * @since 2020/4/13 21:29
  */
-public class ClientChatRoomChannelInitializer extends ChannelInitializer<SocketChannel> {
+public class ClientChannelInitializer extends ChannelInitializer<SocketChannel> {
+    private Bootstrap bootstrap;
+
+    public ClientChannelInitializer(Bootstrap bootstrap) {
+        super();
+        this.bootstrap = bootstrap;
+    }
 
     @Override
     protected void initChannel(SocketChannel channel) {
         ChannelPipeline pipeline = channel.pipeline();
-        pipeline.addLast(new LineBasedFrameDecoder(2048));
         pipeline.addLast(new StringDecoder());
         pipeline.addLast(new StringEncoder());
-        pipeline.addLast(new ClientChannelHandler());
+        pipeline.addLast(new ClientChannelHandler(bootstrap));
     }
 }
