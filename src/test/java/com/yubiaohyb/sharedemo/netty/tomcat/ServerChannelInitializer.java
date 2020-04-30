@@ -13,11 +13,16 @@ import io.netty.handler.codec.http.HttpServerCodec;
  * @since 2020/4/28 23:18
  */
 public class ServerChannelInitializer extends ChannelInitializer<SocketChannel> {
+    private final Server server;
+
+    public ServerChannelInitializer(Server server) {
+        this.server = server;
+    }
 
     @Override
     protected void initChannel(SocketChannel ch) throws Exception {
         ChannelPipeline pipeline = ch.pipeline();
         pipeline.addLast(new HttpServerCodec());
-        pipeline.addLast(null);
+        pipeline.addLast(new ServerChannelHandler(server));
     }
 }

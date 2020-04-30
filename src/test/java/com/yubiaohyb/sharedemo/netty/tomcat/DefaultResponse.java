@@ -6,7 +6,6 @@ import io.netty.handler.codec.http.HttpHeaderValues;
 import io.netty.handler.codec.http.HttpHeaders;
 import io.netty.handler.codec.http.HttpRequest;
 import io.netty.handler.codec.http.HttpUtil;
-import java.io.UnsupportedEncodingException;
 import javax.validation.constraints.NotNull;
 
 import io.netty.buffer.Unpooled;
