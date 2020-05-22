@@ -31,6 +31,12 @@
     </properties>
 
     <dependencies>
+        <dependency>
+            <groupId>com.taobao.api</groupId>
+            <artifactId>taobao-sdk</artifactId>
+            <version>1.0.2</version>
+        </dependency>
+
         <!-- https://mvnrepository.com/artifact/io.netty/netty-all -->
         <dependency>
             <groupId>io.netty</groupId>

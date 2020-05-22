@@ -1,4 +1,10 @@
-##
+###
 GET localhost:8080/test/test
+
+###
+POST yubiaohyb.vaiwan.com/qimen/canary/appServiceReserveFacade/orderServicesReservable
+Content-Type: application/json
+
+{}
 
 ###
