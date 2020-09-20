@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>vue入门</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<body>
+    <div id="rootNode">
+        <input v-model="inputValue"/>
+        <ul>
+            <li v-for="(itemId, index) of itemIds" :key="index">{{itemId}}</li>
+        </ul>
+    </div>
+    <script type="text/javascript">
+        new Vue({
+            el:"#rootNode",
+            data:{
+                inputValue:"",
+                itemIds:[]
+            },
+            methods:{},
+            watch:{
+                inputValue:function () {
+                    this.itemIds = this.inputValue.split("");
+                }
+            }
+        });
+    </script>
+</body>
+</html>
+
+<!--
+    todolist
+-->

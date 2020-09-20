@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>vue入门</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<body>
+    <div id="rootNode">
+        <div v-if="show">hello</div>
+        <div v-show="show">hello</div>
+        <button @click="handleClick">toggle</button>
+        <ul>
+            <li v-for="(itemId, index) of itemIds" :key="index">{{itemId}}</li>
+        </ul>
+    </div>
+    <script type="text/javascript">
+        new Vue({
+            el:"#rootNode",
+            data:{
+                show:true,
+                itemIds:[1,2,3]
+            },
+            methods:{
+                handleClick:function () {
+                    this.show = !this.show;
+                }
+            }
+        });
+    </script>
+</body>
+</html>
+
+<!--
+    v-if/v-show/v-for
+    v-if dom元素会有增减
+    v-show dom元素不会增减
+-->

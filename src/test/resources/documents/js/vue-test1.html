@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>vue入门</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<body>
+    <div id="rootNode">hello {{msg}} world
+        <h3 v-text="htmlText" @click="handleClick"></h3>
+        <h3 v-html="htmlText"></h3>
+    </div>
+    <script type="text/javascript">
+        new Vue({
+            el:"#rootNode",
+            //template:"<h1>hello {{msg}}</h1>",
+            data:{
+                msg:"Vue",
+                htmlText:"<font color='red'>123</font>"
+            },
+            methods:{
+                handleClick:function(){
+                    //alert(123)
+                    this.htmlText="this is a test"
+                }				}
+        });
+    </script>
+</body>
+</html>
+
+<!--
+	挂载点、模板、实例
+	数据、事件、方法
+
+	插值表达式
+	v-text与v-html
+	v-on: 简写 @
+	面向数据编程，而非数据
+
+-->
