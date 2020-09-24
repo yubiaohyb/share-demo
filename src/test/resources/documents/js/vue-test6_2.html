@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>vue入门</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<body>
+    <div id="rootNode">
+        <div>
+            <input v-model="inputValue" />
+            <button @click="submit" >提交</button>
+        </div>
+        <div>
+            <ul>
+                <myli v-for="(item, index) of itemIds" :key="index" :item="item" :index="index" @remove="remove"/>
+            </ul>
+        </div>
+
+    </div>
+    <script type="text/javascript">
+        Vue.component("myli", {
+          template:"<li @click=\"handleClick\">{{item}}</li>",
+          props:["item", "index"],
+          methods:{
+            handleClick:function() {
+              this.$emit("remove", this.index);
+            }
+          }
+
+        });
+        new Vue({
+            el:"#rootNode",
+            data:{
+                inputValue:"",
+                itemIds:[]
+            },
+            methods:{
+                submit:function () {
+                  this.itemIds.push(this.inputValue)
+                  this.inputValue = "";
+                },
+                remove:function (index) {
+                  this.itemIds.splice(index, 1);
+                }
+            }
+        });
+    </script>
+</body>
+</html>
+
+<!--
+    父组件通过属性绑定向子组件传值，
+    子组件通过触发事件调用父组件方法
+-->

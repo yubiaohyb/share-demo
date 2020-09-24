@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>vue入门</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<body>
+    <div id="rootNode">
+        <div>
+            <input v-model="inputValue" />
+            <button @click="submit" />
+        </div>
+        <div>
+            <ul>
+                <li v-for="(itemId, index) of itemIds" :key="index" @click="remove(index)">{{itemId}}</li>
+            </ul>
+        </div>
+
+    </div>
+    <script type="text/javascript">
+        new Vue({
+            el:"#rootNode",
+            data:{
+                inputValue:"",
+                itemIds:[]
+            },
+            methods:{
+                submit:function () {
+                  this.itemIds.push(this.inputValue)
+                  this.inputValue = "";
+                },
+                remove:function (index) {
+                  this.itemIds.splice(index, 1);
+                }
+            }
+        });
+    </script>
+</body>
+</html>
+
+<!--
+    todolist
+-->
