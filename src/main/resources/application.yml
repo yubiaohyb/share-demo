@@ -1,0 +1,46 @@
+#==================== 日志配合·标准  ============================
+logging:
+  config:
+    classpath: logback-spring.xml
+
+#spring.data.mongodb.host=mongo.yubiaohyb.com
+#spring.data.mongodb.database=student
+
+spring:
+  redis:
+    host: redis.yubiaohyb.com
+  session:
+    store-type: redis
+    redis:
+      flush-mode: IMMEDIATE
+      namespace: share-demo:session
+
+server:
+  servlet:
+    session:
+      timeout: 60
+
+info:
+  author:
+    name: 黄玉标
+    email: 971449932@qq.com
+  project:  # 从pom文件中读取指定的属性值
+    groupId: @project.groupId@
+    artifactId: @project.artifactId@
+    version: @project.version@
+
+
+management:
+  server:
+    port: 9090
+    servlet:
+      context-path: /management
+  endpoints:
+    web:
+      base-path: /actuator
+      exposure:
+        include: "*" # 用星号暴露所有监控终端，单独星号在yml中不行
+        exclude: ["auditevents"]
+        # exclude:
+          # - auditevents
+
