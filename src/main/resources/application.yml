@@ -44,3 +44,9 @@ management:
         # exclude:
           # - auditevents
 
+elasticsearch:
+  host: localhost
+  port: 9200
+  connTimeout: 3000
+  socketTimeout: 5000
+  connectionRequestTimeout: 500

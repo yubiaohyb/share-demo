@@ -5,9 +5,13 @@ import com.yubiaohyb.sharedemo.annotation.DateEndTime;
 import com.yubiaohyb.sharedemo.annotation.ResponseHeader;
 import com.yubiaohyb.sharedemo.demo.WriteExcel;
 import com.yubiaohyb.sharedemo.form.DateEndTimeTestForm;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.elasticsearch.client.RequestOptions;
+import org.elasticsearch.client.RestHighLevelClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.validation.annotation.Validated;
@@ -33,9 +37,22 @@ import java.util.Date;
  */
 @RestController
 @RequestMapping("/test1")
+@Slf4j
 public class TestController1 {
     private static final Logger LOGGER = LoggerFactory.getLogger(TestController1.class);
 
+    @Autowired(required = false)
+    private RestHighLevelClient restHighLevelClient;
+
+    @GetMapping("/elasticsearch/ping")
+    public boolean get() {
+        try {
+            return restHighLevelClient.ping(RequestOptions.DEFAULT);
+        } catch (IOException e) {
+            log.info("ping elasticsearch 异常", e);
+        }
+        return false;
+    }
 
     @GetMapping("/session")
     public String session(HttpServletRequest request) {

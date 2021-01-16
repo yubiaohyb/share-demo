@@ -2,6 +2,7 @@ package com.yubiaohyb.sharedemo;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 
 /**
@@ -14,6 +15,7 @@ import org.springframework.web.context.support.AnnotationConfigWebApplicationCon
  * @since 2018/9/15 上午1:02
  */
 @SpringBootApplication
+@EnableConfigurationProperties
 public class ShareDemoApplication {
 
     public static void main(String[] args) {
