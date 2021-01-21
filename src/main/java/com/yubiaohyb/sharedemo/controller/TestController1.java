@@ -24,7 +24,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 
 /**
  * 人若志趣不远，心不在焉，虽学不成。
@@ -78,6 +80,12 @@ public class TestController1 {
     public String test1() {
         LOGGER.debug("invoke test1");
         return "successs";
+    }
+
+    @GetMapping("/li")
+    public List<Integer> li() {
+        LOGGER.debug("invoke li");
+        return Arrays.asList(1, 2, 3);
     }
 
     /**
