@@ -7,6 +7,7 @@ import com.yubiaohyb.sharedemo.demo.WriteExcel;
 import com.yubiaohyb.sharedemo.form.DateEndTimeTestForm;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestHighLevelClient;
 import org.slf4j.Logger;
@@ -16,6 +17,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -23,10 +25,12 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.io.BufferedReader;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
+import java.util.*;
+import java.util.stream.IntStream;
 
 /**
  * 人若志趣不远，心不在焉，虽学不成。
@@ -45,6 +49,36 @@ public class TestController1 {
 
     @Autowired(required = false)
     private RestHighLevelClient restHighLevelClient;
+
+    private List<String> oomList = new ArrayList<>();
+
+    @PostMapping("/curl")
+    public String curl(HttpServletRequest request) {
+        try {
+            BufferedReader reader = new BufferedReader(new InputStreamReader(request.getInputStream()));
+            reader.lines().forEach(a -> {
+                try {
+                    log.info(new String(Base64.getDecoder().decode(a), "UTF-8"));
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                }
+            });
+
+           // reader.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        //log.info(JSON.toJSONString(request.getAttributeNames()));
+        return "success";
+    }
+
+    @GetMapping("/oom")
+    public boolean oom() {
+        System.out.println("======开始=======");
+        IntStream.range(0, Integer.MAX_VALUE).forEach(a -> oomList.add(a + ""));
+        System.out.println("======结束=======");
+        return true;
+    }
 
     @GetMapping("/elasticsearch/ping")
     public boolean get() {
