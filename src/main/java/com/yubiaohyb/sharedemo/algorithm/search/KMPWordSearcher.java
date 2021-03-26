@@ -1,31 +1,34 @@
-package com.yubiaohyb.sharedemo.algorithm.sort;
+package com.yubiaohyb.sharedemo.algorithm.search;
 
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 
 /**
  * 人若志趣不远，心不在焉，虽学不成。
  * <p>
- * description  -  functionDescrption
+ * description  -  关键词查找算法 KMP
  *
  * @author Yubiao Huang (https://github.com/yubiaohyb)
  * @version $$Id$$
  * @since 3/26/21 1:19 AM
  */
 @Data
+@Slf4j
 public class KMPWordSearcher {
     private String target;
     private List<Integer> crosserMaxLengthList;
 
     public KMPWordSearcher(String target) {
         this.target = target;
+        log.info("计算交集最长长度表...");
         crosserMaxLengthList = new ArrayList<>(target.length() - 1);
         for (int j = 0; j < target.length(); j++) {
             String temp = target.substring(0, j+1);
+            log.info("子字符串：" + temp);
             int length = temp.length();
             List<String> prefixes = new ArrayList<>(length - 1);
             List<String> suffixes = new ArrayList<>(length - 1);
@@ -37,42 +40,47 @@ public class KMPWordSearcher {
                     prefixes.add(target.substring(0, i+1));
                 }
             }
-            System.out.println(prefixes);
-            System.out.println(suffixes);
+            log.info("前缀集合：" + prefixes);
+            log.info("后缀集合：" + suffixes);
 
             HashSet<String> prefixSet = new HashSet<>(prefixes);
             HashSet<String> suffixSet = new HashSet<>(suffixes);
             HashSet<String> intersectionSet = new HashSet<>();
             intersectionSet.addAll(prefixSet);
             intersectionSet.retainAll(suffixSet);
-            System.out.println(intersectionSet);
+            log.info("交集：" + intersectionSet);
 
             int maxLength = 0;
             for (String intersection : intersectionSet) {
                 maxLength = intersection.length() > maxLength ? intersection.length() : maxLength;
             }
             crosserMaxLengthList.add(maxLength);
-            System.out.println(maxLength);
-            System.out.println("//////////////////");
+            log.info("最大长度：" + maxLength);
+            log.info("//////////////////");
         }
     }
 
     public List<Integer> searchIndex(String original) {
+        log.info("源字符串：" + original);
         List<Integer> indexes = new ArrayList<>();
         for (int i = 0, pos = -1; i <= original.length() - target.length(); ) {
             for (int j = 0; j < target.length(); j++) {
                 if (original.charAt(i + j) == target.charAt(j)) {
                     pos = j;
                 } else {
+                    boolean found = false;
                     for (int k = j - 1; k > 0; k--) {
                         if (crosserMaxLengthList.get(k) > 0) {
                             j = k - crosserMaxLengthList.get(k) + 1;
                             i += crosserMaxLengthList.get(k);
                             pos = j - 1;
+                            found = true;
                             break;
                         }
                     }
-                    pos = -1;
+                    if (!found) {
+                        pos = -1;
+                    }
                 }
             }
             if (-1 == pos) {
@@ -89,7 +97,7 @@ public class KMPWordSearcher {
 
     public static void main(String[] args) {
         KMPWordSearcher ababc = new KMPWordSearcher("ababc");
-        System.out.println(ababc);
-        System.out.println(ababc.searchIndex("ababdababcababababc"));
+        log.info("最终基础数据：" + ababc);
+        log.info("匹配结果：" + ababc.searchIndex("ababdababcababababc"));
     }
 }
