@@ -40,7 +40,8 @@ share-demo
 ## mac使用
 * [mac](./src/test/resources/documents/mac/mac.md)
 
-## 个人随笔
+## 笔记
+* python 激活码  http://idea.hicxy.com/
 
 ## *联系方式*
 >电子邮箱：<971449932@qq.com>
