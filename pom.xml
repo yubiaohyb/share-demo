@@ -180,6 +180,18 @@
             <artifactId>rasa-java-sdk</artifactId>
             <version>1.0.1</version>
         </dependency>
+
+        <dependency>
+            <groupId>com.aliyun</groupId>
+            <artifactId>alibabacloud-chatbot20220408</artifactId>
+            <version>1.0.4</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.aliyun</groupId>
+            <artifactId>chatbot20220408</artifactId>
+            <version>1.0.4</version>
+        </dependency>
     </dependencies>
 
     <build>
